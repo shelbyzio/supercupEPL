@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="my" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPL eFootball Tournament Hub</title>
+    <!-- Tailwind CSS for high fidelity designs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@600;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', 'Padauk', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e0026 0%, #08000b 100%);
+        }
+        .score-font {
+            font-family: 'Orbitron', monospace;
+        }
+        /* EPL Premium glass styling effects */
+        .glass-card {
+            background: rgba(56, 0, 60, 0.45);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glow-epl {
+            box-shadow: 0 0 35px rgba(0, 255, 135, 0.15);
+        }
+        /* Optimized scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #08000b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38003c;
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff87;
+        }
+        @keyframes live-blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.9); }
+        }
+        .live-indicator {
+            animation: live-blink 1.8s infinite;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-[#00ff87] selection:text-[#38003c] pb-8">
+
+    <header class="border-b border-[#38003c]/60 bg-[#08000b]/95 backdrop-blur-lg sticky top-0 z-40 transition-all">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <!-- Branding Logo Frame with Pulse Effect -->
+                <div class="relative">
+                    <div class="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-[#e90052] to-[#00ff87] opacity-75 blur-md animate-pulse"></div>
+                    <div class="relative bg-[#38003c] p-2 rounded-2xl border border-white/10 flex items-center justify-center shadow-lg w-12 h-12">
+                        <!-- Custom Page Logo Placeholder -->
+                        <img id="page-logo" 
+                             src="logo.png" 
+                             alt="EPL Logo" 
+                             class="w-full h-full object-contain rounded-xl"
+                             onerror="this.src='https://placehold.co/100x100/38003c/00ff87?text=LOGO'">
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-slate-100 to-[#00ff87] bg-clip-text text-transparent tracking-tight">
+                        Premier League eFootball
+                    </h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#00ff87] live-indicator shadow-md shadow-[#00ff87]/50"></span>
+                        <p class="text-[10px] sm:text-xs text-slate-300 uppercase tracking-widest font-extrabold">Single Round-Robin (၁၂ သင်း)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Badges & Admin Control Actions -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div id="sync-status" class="flex items-center gap-1.5 bg-[#08000b] border border-white/5 px-3 py-1.5 rounded-xl text-[11px] text-slate-400 font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse" id="sync-indicator"></span>
+                    <span id="sync-text">Connecting...</span>
+                </div>
+
+                <div id="role-badge" class="flex items-center gap-2 bg-[#38003c]/60 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300">
+                    <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Viewer Mode 👀</span>
+                </div>
+
+                <button id="admin-action-btn" onclick="openAdminModal()" class="flex items-center gap-1.5 bg-[#38003c] hover:bg-[#4d0c52] text-[#00ff87] border border-[#00ff87]/20 px-4 py-2 rounded-xl text-xs font-black transition-all shadow-md">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin Login
+                </button>
+
+                <div id="admin-actions-group" class="hidden flex items-center gap-2">
+                    <button onclick="simulateFullLeague()" class="flex items-center gap-1.5 bg-[#00ff87] hover:bg-[#00e074] text-[#38003c] font-black px-4 py-2 rounded-xl text-xs transition-all shadow-lg hover:scale-[1.01]">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 fill-[#38003c]"></i> တစ်ရာသီလုံး Simulate
+                    </button>
+                    <button onclick="triggerResetModal()" class="flex items-center gap-1.5 bg-[#e90052]/20 hover:bg-[#e90052]/30 border border-[#e90052]/40 text-[#e90052] font-black px-3 py-2 rounded-xl text-xs transition-all">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 mt-6 sm:px-6 lg:px-8 w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- League Leader Widget -->
+        <div class="glass-card p-4 rounded-2xl flex items-center gap-3.5 relative overflow-hidden group hover:border-[#00ff87]/30 transition-all duration-300">
+            <div class="absolute -right-3 -bottom-3 text-white/5 group-hover:scale-110 transition-transform">
+                <i data-lucide="trophy" class="w-20 h-20"></i>
+            </div>
+            <div class="p-3 rounded-xl bg-[#00ff87]/10 border border-[#00ff87]/20 text-[#00ff87]">
+                <i data-lucide="crown" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block tracking-wider">ဇယားထိပ်ဆုံး</span>
+                <span id="leader-name" class="text-sm font-black text-white truncate max-w-[180px] block">-</span>
+            </div>
+        </div>
+
+        <!-- Total Goals Widget -->
+        <div class="glass-card p-4 rounded-2xl flex items-center gap-3.5 relative overflow-hidden group hover:border-[#e90052]/30 transition-all duration-300">
+            <div class="absolute -right-3 -bottom-3 text-white/5 group-hover:scale-110 transition-transform">
+                <i data-lucide="activity" class="w-20 h-20"></i>
+            </div>
+            <div class="p-3 rounded-xl bg-[#e90052]/10 border border-[#e90052]/20 text-[#e90052]">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block tracking-wider">စုစုပေါင်းသွင်းဂိုး</span>
+                <span id="total-goals" class="text-sm font-black text-white block score-font">0 ဂိုး</span>
+            </div>
+        </div>
+
+        <!-- Progress Widget -->
+        <div class="glass-card p-4 rounded-2xl flex items-center gap-3.5 relative overflow-hidden group hover:border-purple-500/30 transition-all duration-300">
+            <div class="absolute -right-3 -bottom-3 text-white/5 group-hover:scale-110 transition-transform">
+                <i data-lucide="calendar" class="w-20 h-20"></i>
+            </div>
+            <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300">
+                <i data-lucide="calendar" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block tracking-wider">ပြီးစီးမှု ရာခိုင်နှုန်း</span>
+                <span id="season-progress-text" class="text-sm font-black text-white block score-font">0% (0/66 ပွဲ)</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 w-full flex flex-col gap-6">
+        
+        <div class="bg-[#38003c]/30 p-1.5 rounded-2xl border border-white/5 flex flex-wrap gap-2 shadow-2xl">
+            <button onclick="switchTab('fixtures')" id="tab-fixtures" class="tab-btn flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-gradient-to-r from-[#e90052] to-[#38003c] text-white shadow-lg">
+                <i data-lucide="calendar-range" class="w-4 h-4"></i> ပွဲစဉ်ဇယားကြီး (Fixtures)
+            </button>
+            <button onclick="switchTab('standings')" id="tab-standings" class="tab-btn flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-slate-300 hover:text-white hover:bg-[#38003c]/50">
+                <i data-lucide="trophy" class="w-4 h-4"></i> အမှတ်ပေးဇယားနှင့် ပွဲစဉ်များ
+            </button>
+            <button onclick="switchTab('teams')" id="tab-teams" class="tab-btn flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-slate-300 hover:text-white hover:bg-[#38003c]/50">
+                <i data-lucide="shield" class="w-4 h-4"></i> ကလပ်အသင်းများ (Clubs Table)
+            </button>
+        </div>
+
+        <div id="panel-fixtures" class="tab-panel space-y-6">
+            <!-- Large Fixtures Control Bar -->
+            <div class="glass-card rounded-2xl p-6 border border-white/5 flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="font-black text-lg sm:text-xl text-white flex items-center gap-2">
+                        <i data-lucide="swords" class="text-[#00ff87] w-6 h-6"></i>
+                        ပွဲစဉ်ဇယားကြီး (Fixtures Hub)
+                    </h2>
+                    <p class="text-xs text-slate-300 mt-0.5">ပွဲစဉ်များကို မြင်ကွင်းကျယ်အကြီးစားစနစ်ဖြင့် အလွယ်တကူ စီမံထိန်းချုပ်နိုင်ပါသည်။</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="prevMatchday()" class="p-3 bg-[#38003c] hover:bg-[#38003c]/80 border border-white/10 rounded-xl text-slate-300 hover:text-white transition-all">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+                    <select id="matchday-select-huge" onchange="changeMatchday(this.value)" class="bg-[#08000b] border-2 border-[#38003c] text-[#00ff87] font-black text-sm sm:text-base rounded-xl px-5 py-2.5 focus:ring-2 focus:ring-[#00ff87] focus:outline-none">
+                        <!-- Matchdays generated dynamically -->
+                    </select>
+                    <button onclick="nextMatchday()" class="p-3 bg-[#38003c] hover:bg-[#38003c]/80 border border-white/10 rounded-xl text-slate-300 hover:text-white transition-all">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="flex gap-2" id="admin-matchday-controls">
+                    <button onclick="triggerLiveSimulation()" class="bg-gradient-to-r from-[#e90052]/20 to-[#38003c]/40 hover:from-[#e90052]/30 hover:to-[#38003c]/60 text-[#e90052] border border-[#e90052]/40 font-black px-4 py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#e90052] live-indicator"></span> Live Matchday စတင်ရန်
+                    </button>
+                    <button onclick="autoFillCurrentMatchday()" class="bg-[#38003c] hover:bg-[#38003c]/80 text-[#00ff87] border border-[#00ff87]/30 font-black px-4 py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4"></i> အမြန်ဆော့မည်
+                    </button>
+                </div>
+                <div class="text-xs text-[#00ff87] bg-[#00ff87]/5 border border-[#00ff87]/20 px-4 py-2.5 rounded-xl font-bold block" id="user-matchday-info-badge">
+                    👀 ရလဒ်များကို Admin မှ တိုက်ရိုက်ထည့်သွင်းပေးပါမည်။
+                </div>
+            </div>
+
+            <!-- Massive Fixture Grid -->
+            <div id="fixtures-huge-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Large card objects inject here -->
+            </div>
+        </div>
+
+        <div id="panel-standings" class="tab-panel space-y-4 hidden">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                
+                <!-- Left: Interactive Points Standings Table -->
+                <div class="xl:col-span-8 glass-card rounded-2xl overflow-hidden shadow-2xl border border-white/5">
+                    <div class="p-5 border-b border-white/5 bg-[#38003c]/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <h2 class="font-black text-base sm:text-lg text-white flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#00ff87] animate-ping"></span>
+                                Standings Table
+                            </h2>
+                            <p class="text-xs text-slate-300 mt-1">Single Round-Robin စနစ်ဖြင့် အချိန်နှင့်တပြေးညီ တိုက်ရိုက်တွက်ချက်ထားပါသည်။</p>
+                        </div>
+                        <div class="text-[11px] bg-[#38003c] text-[#00ff87] px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-2 font-black">
+                            <span>ချန်ပီယံဆု: 🏆</span>
+                            <span class="w-1.5 h-3 bg-[#00ff87] rounded"></span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#38003c]/40 text-slate-300 text-[11px] uppercase tracking-wider border-b border-white/5">
+                                    <th class="py-4 px-4 text-center w-12 font-black">#</th>
+                                    <th class="py-4 px-4 min-w-[190px]">ကလပ်အသင်း</th>
+                                    <th class="py-4 px-3 text-center w-12">ပွဲ</th>
+                                    <th class="py-4 px-3 text-center w-12 text-[#00ff87]">နိုင်</th>
+                                    <th class="py-4 px-3 text-center w-12 text-amber-400">သရေ</th>
+                                    <th class="py-4 px-3 text-center w-12 text-[#e90052]">ရှုံး</th>
+                                    <th class="py-4 px-3 text-center hidden sm:table-cell w-16">ဂိုး</th>
+                                    <th class="py-4 px-3 text-center w-16">GD</th>
+                                    <th class="py-4 px-4 text-center w-16 font-black text-[#00ff87] bg-[#00ff87]/5">ရမှတ်</th>
+                                    <th class="py-4 px-4 text-center min-w-[110px] hidden md:table-cell">နောက်ဆုံးရလဒ်</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standings-body" class="divide-y divide-[#38003c]/20 text-xs sm:text-sm">
+                                <!-- Generated Dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right: Side Fixtures Interactive Panel -->
+                <div class="xl:col-span-4 flex flex-col gap-4">
+                    <div class="glass-card rounded-2xl p-5 border border-white/5 flex-grow flex flex-col min-h-[400px]">
+                        <div class="flex justify-between items-center pb-4 border-b border-white/5">
+                            <div>
+                                <h3 class="font-black text-white text-sm flex items-center gap-2">
+                                    <i data-lucide="calendar" class="text-[#00ff87] w-4 h-4"></i>
+                                    ဤအပတ်ပွဲစဉ်များ
+                                </h3>
+                                <p class="text-[10px] text-slate-300 mt-0.5" id="mini-matchday-title">Matchday 1</p>
+                            </div>
+                            <span class="text-[10px] text-[#00ff87] bg-[#00ff87]/10 border border-[#00ff87]/20 px-2.5 py-1 rounded-full font-black" id="matchday-status-badge">-</span>
+                        </div>
+
+                        <!-- Mini Fixture List inside Standings -->
+                        <div id="mini-fixtures-container" class="mt-4 space-y-3 overflow-y-auto max-h-[450px] flex-grow">
+                            <!-- Mini fixtures generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="panel-teams" class="tab-panel space-y-4 hidden">
+            <div class="glass-card rounded-2xl p-6 shadow-2xl border border-white/5">
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="font-black text-base sm:text-lg text-white flex items-center gap-2">
+                            <i data-lucide="sliders" class="text-[#00ff87] w-5 h-5"></i>
+                            ကလပ်အသင်းများ စာရင်းနှင့် လိုဂိုပြင်ဆင်ရန်
+                        </h2>
+                        <p class="text-xs text-slate-300 mt-1">အသင်းအမည်၊ အတိုကောက်များနှင့် လိုဂို Image URLs သို့မဟုတ် local folder အတွင်းရှိ ပုံရိပ်ဖိုင်အမည်များကို တိုက်ရိုက် စိတ်ကြိုက် ပြင်ဆင်ထိန်းချုပ်နိုင်ပါသည်။</p>
+                    </div>
+                    <button id="admin-save-clubs-btn" onclick="saveTeamsConfiguration()" class="bg-gradient-to-r from-[#00ff87] to-teal-500 hover:from-[#00ff87] hover:to-teal-400 text-[#38003c] font-black px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-[#00ff87]/25 flex items-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i> ပြောင်းလဲမှုများကို သိမ်းဆည်းမည်
+                    </button>
+                </div>
+
+                <!-- Clubs Table View with editable custom URLs -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-[#38003c]/40 text-slate-300 text-[11px] uppercase tracking-wider border-b border-white/5">
+                                <th class="py-3.5 px-4 text-center w-12">#</th>
+                                <th class="py-3.5 px-4 min-w-[200px]">ကလပ်အသင်းအမည်</th>
+                                <th class="py-3.5 px-4 w-32">အတိုကောက်</th>
+                                <th class="py-3.5 px-4 min-w-[280px]">ပုံရိပ်ဖိုင် သို့မဟုတ် URL Link</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teams-table-body" class="divide-y divide-[#38003c]/20 text-xs sm:text-sm">
+                            <!-- Loaded Dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-[#08000b]/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-[#1a0022] border border-[#38003c] w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4">
+            <div class="flex items-center gap-3 text-[#00ff87]">
+                <i data-lucide="lock" class="w-6 h-6"></i>
+                <h3 class="font-black text-white text-base">Admin Dashboard ဝင်ရောက်ခြင်း</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                ရလဒ်များ ပြင်ဆင်နိုင်ရန်နှင့် Simulate လုပ်နိုင်ရန် Admin Password ကို ရိုက်ထည့်ပါ။ (Default PIN: <b>1234</b>)
+            </p>
+            <div class="space-y-1.5">
+                <label class="text-[10px] uppercase text-slate-400 font-bold block">Enter Password / PIN</label>
+                <input type="password" id="admin-pin-input" class="w-full bg-[#08000b] border-2 border-[#38003c] text-[#00ff87] font-black text-center tracking-widest text-lg rounded-xl py-3 focus:outline-none focus:border-[#00ff87] score-font">
+                <p id="login-error-text" class="text-xs text-[#e90052] font-semibold text-center hidden">ဝင်ခွင့်စကားဝှက် မှားယွင်းနေပါသည်။</p>
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeAdminModal()" class="flex-1 py-2.5 bg-[#08000b] hover:bg-[#08000b]/80 text-slate-400 border border-[#38003c] font-bold rounded-xl text-xs transition-all">
+                    မလုပ်တော့ပါ
+                </button>
+                <button onclick="verifyAdminLogin()" class="flex-1 py-2.5 bg-[#00ff87] hover:bg-[#00e074] text-[#38003c] font-black rounded-xl text-xs transition-all shadow-lg shadow-[#00ff87]/20">
+                    Login ဝင်မည်
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REAL-TIME LIVE MATCHDAY SIMULATOR OVERLAY MODAL -->
+    <div id="live-sim-modal" class="fixed inset-0 bg-[#08000b]/95 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="w-full max-w-2xl bg-[#1a0022] border border-[#38003c] rounded-3xl overflow-hidden shadow-2xl relative glow-epl">
+            <!-- Modal Header -->
+            <div class="p-5 border-b border-[#38003c] bg-[#08000b] flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e90052] opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-[#e90052]"></span>
+                    </span>
+                    <h3 class="font-black text-white text-base sm:text-lg flex items-center gap-2">
+                        Real-Time Live Simulator Console
+                    </h3>
+                </div>
+                <div id="live-sim-timer" class="text-[#00ff87] font-black score-font bg-[#00ff87]/10 border border-[#00ff87]/20 px-3 py-1.5 rounded-xl text-sm">
+                    00:00
+                </div>
+            </div>
+
+            <!-- Live Match Panels -->
+            <div class="p-6 space-y-4 max-h-[450px] overflow-y-auto" id="live-sim-matches-container">
+                <!-- Matches with real-time score updates will render here -->
+            </div>
+
+            <!-- Live Commentary Ticker -->
+            <div class="mx-6 p-4 bg-[#08000b] border border-[#38003c] rounded-2xl flex items-center gap-3">
+                <div class="p-2 bg-[#00ff87]/10 rounded-xl text-[#00ff87]">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-bold text-slate-200" id="live-commentary-text">
+                    ပွဲစဉ်များ စတင်ရန် ပြင်ဆင်နေပါသည်။
+                </div>
+            </div>
+
+            <!-- Modal Footer Controls -->
+            <div class="p-5 border-t border-[#38003c] bg-[#08000b] flex justify-between items-center">
+                <div class="text-[11px] text-slate-300 font-bold" id="live-sim-speed-label">
+                    Live Simulator Speed: 10x
+                </div>
+                <button id="close-sim-btn" onclick="closeLiveSimulation()" class="hidden py-2.5 px-6 bg-[#00ff87] hover:bg-[#00e074] text-[#38003c] font-black rounded-xl text-xs sm:text-sm transition-all shadow-lg">
+                    ပြီးဆုံးပါပြီ (ပိတ်မည်)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Match Score Edit Modal -->
+    <div id="score-modal" class="fixed inset-0 bg-[#08000b]/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-[#1a0022] border border-[#38003c] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-[#38003c] bg-[#08000b] flex justify-between items-center">
+                <h3 class="font-black text-white flex items-center gap-2">
+                    <i data-lucide="edit" class="text-[#00ff87] w-5 h-5"></i>
+                    ရလဒ်ကိုယ်တိုင်ထည့်သွင်းရန်
+                </h3>
+                <button onclick="closeScoreModal()" class="text-slate-300 hover:text-white transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <input type="hidden" id="modal-match-id">
+                
+                <div class="flex items-center justify-between gap-4">
+                    <!-- Home Team -->
+                    <div class="flex-1 flex flex-col items-center text-center gap-2">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg score-font shadow-lg" id="modal-home-logo">
+                            <!-- Render with Img Src dynamically -->
+                        </div>
+                        <span class="font-black text-xs sm:text-sm text-slate-200 truncate max-w-[110px]" id="modal-home-name">Home Team</span>
+                    </div>
+
+                    <!-- Versus / Score Inputs -->
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="modal-home-score" min="0" max="20" class="w-14 h-14 bg-[#08000b] border border-[#38003c] text-center text-xl font-black rounded-xl text-[#00ff87] focus:outline-none focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] score-font">
+                        <span class="text-slate-500 font-black text-lg">-</span>
+                        <input type="number" id="modal-away-score" min="0" max="20" class="w-14 h-14 bg-[#08000b] border border-[#38003c] text-center text-xl font-black rounded-xl text-[#00ff87] focus:outline-none focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] score-font">
+                    </div>
+
+                    <!-- Away Team -->
+                    <div class="flex-1 flex flex-col items-center text-center gap-2">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg score-font shadow-lg" id="modal-away-logo">
+                            <!-- Render with Img Src dynamically -->
+                        </div>
+                        <span class="font-black text-xs sm:text-sm text-slate-200 truncate max-w-[110px]" id="modal-away-name">Away Team</span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-[#08000b] border border-[#38003c] rounded-2xl text-center text-[11px] text-slate-300">
+                    ရလဒ်များကို ပြောင်းလဲပြီးပါက အမှတ်ပေးဇယားနှင့် တန်းစီဇယားများကို ချက်ချင်း ပြန်လည်တွက်ချက်ပေးမည် ဖြစ်သည်။
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-[#38003c] bg-[#08000b] flex gap-2">
+                <button onclick="closeScoreModal()" class="flex-1 py-3 bg-[#38003c] hover:bg-[#38003c]/80 text-slate-300 font-black rounded-xl text-xs sm:text-sm transition-all border border-white/10">
+                    မလုပ်တော့ပါ
+                </button>
+                <button onclick="saveManualScore()" class="flex-1 py-3 bg-[#00ff87] text-[#38003c] font-black rounded-xl text-xs sm:text-sm transition-all shadow-lg hover:bg-[#00e074]">
+                    ရလဒ်သိမ်းဆည်းမည်
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-[#08000b]/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-[#1a0022] border border-[#38003c] w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4">
+            <div class="flex items-center gap-3 text-[#e90052]">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                <h3 class="font-black text-white text-base">သတိပေးချက်</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                ပွဲစဉ်ဇယားအားလုံး၊ ရလဒ်များနှင့် အချက်အလက်များအားလုံးကို ဖျက်ပစ်ပြီး အစမှပြန်စရန် သေချာပါသလား?
+            </p>
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeConfirmModal()" class="flex-1 py-2.5 bg-[#08000b] hover:bg-[#08000b]/80 text-slate-400 border border-[#38003c] font-bold rounded-xl text-xs transition-all">
+                    မလုပ်တော့ပါ
+                </button>
+                <button onclick="executeTournamentReset()" class="flex-1 py-2.5 bg-[#e90052] hover:bg-[#cf0049] text-white font-black rounded-xl text-xs transition-all shadow-lg shadow-[#e90052]/20">
+                    သေချာပါသည်၊ ပြန်စမည်
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast UI System -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-[#08000b]/90 border border-[#00ff87]/30 text-[#00ff87] px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 max-w-sm">
+            <i data-lucide="check-circle" class="w-5 h-5 text-[#00ff87]"></i>
+            <span class="text-xs font-bold" id="toast-text">အောင်မြင်စွာ လုပ်ဆောင်ပြီးပါပြီ။</span>
+        </div>
+    </div>
+
+    <script>
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playGoal() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc1 = this.ctx.createOscillator();
+                const osc2 = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc1.type = 'triangle';
+                osc1.frequency.setValueAtTime(440, now);
+                osc1.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(554.37, now);
+                osc2.frequency.exponentialRampToValueAtTime(1108.73, now + 0.15);
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc1.start();
+                osc2.start();
+                osc1.stop(now + 0.4);
+                osc2.stop(now + 0.4);
+            },
+            playWhistle() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1800, now);
+                osc.frequency.linearRampToValueAtTime(2200, now + 0.1);
+                osc.frequency.linearRampToValueAtTime(1800, now + 0.2);
+
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start();
+                osc.stop(now + 0.3);
+            }
+        };
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'efootball-epl-manager';
+        
+        // ⚠️ FIREBASE CONFIGURATION - လူကြီးမင်း၏ Firebase Config အချက်အလက်များကို အောက်တွင် အစားထိုးပါ
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        let app, db, auth;
+        let isFirebaseActive = false;
+
+        async function initFirebase() {
+            try {
+                // Firebase စတင်တပ်ဆင်ခြင်း
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Anonymous Auth စနစ်ဖြင့် အကောင့်ဝင်ခြင်း (Database Rules အလုပ်လုပ်ရန်)
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                isFirebaseActive = true;
+                setSyncStatus(true, "Live Connected");
+                setupRealtimeSync();
+            } catch (err) {
+                console.warn("Firebase config is mock/invalid. Running in local sandbox backup mode.", err);
+                setSyncStatus(false, "Local Offline Mode");
+                initLocalFallback();
+            }
+        }
+
+        window.teams = [];
+        window.fixtures = [];
+        window.currentMatchday = 1;
+        window.isAdmin = false;
+        
+        const adminPinCode = "1234";
+
+        /* ==========================================
+           👇 အသင်းတစ်သင်းချင်းစီအတွက် အမည်နှင့် ပုံရိပ်ဖိုင်လမ်းကြောင်း (src) များ ဖြစ်ပါသည် 👇
+           ========================================== */
+        const defaultTeams = [
+            { id: 1, name: "Manchester United", short: "MUN", rating: 88, color: "bg-red-600", fontColor: "text-white", form: [], src: "manunited.jpg" },
+            { id: 2, name: "Manchester City", short: "MCI", rating: 95, color: "bg-sky-400", fontColor: "text-slate-900", form: [], src: "mancity.jpg" },
+            { id: 3, name: "Liverpool FC", short: "LIV", rating: 92, color: "bg-rose-700", fontColor: "text-white", form: [], src: "liverpool.jpg" },
+            { id: 4, name: "Arsenal FC", short: "ARS", rating: 93, color: "bg-red-500", fontColor: "text-white", form: [], src: "arsenal.jpg" },
+            { id: 5, name: "Chelsea FC", short: "CHE", rating: 86, color: "bg-blue-700", fontColor: "text-white", form: [], src: "chelsea.jpg" },
+            { id: 6, name: "Tottenham Hotspur", short: "TOT", rating: 84, color: "bg-slate-200", fontColor: "text-slate-955", form: [], src: "spurs.jpg" },
+            { id: 7, name: "Aston Villa", short: "AVL", rating: 85, color: "bg-amber-800", fontColor: "text-amber-300", form: [], src: "villa.jpg" },
+            { id: 8, name: "Newcastle United", short: "NEW", rating: 85, color: "bg-slate-800", fontColor: "text-white", form: [], src: "newscastle.jpg" },
+            { id: 9, name: "West Ham United", short: "WHU", rating: 81, color: "bg-red-950", fontColor: "text-[#00ff87]", form: [], src: "westham.jpg" },
+            { id: 10, name: "Everton FC", short: "EVE", rating: 78, color: "bg-blue-900", fontColor: "text-white", form: [], src: "everton.jpg" },
+            { id: 11, name: "Brighton & Hove Albion", short: "BHA", rating: 82, color: "bg-blue-600", fontColor: "text-slate-100", form: [], src: "brighton.jpg" },
+            { id: 12, name: "Wolverhampton", short: "WOL", rating: 79, color: "bg-amber-500", fontColor: "text-slate-900", form: [], src: "wolves.jpg" }
+        ];
+
+        // Realtime listener setup using Rule 1 paths
+        function setupRealtimeSync() {
+            if (!isFirebaseActive) return;
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tournament', 'current_state');
+
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    window.teams = data.teams || [];
+                    window.fixtures = data.fixtures || [];
+                    window.currentMatchday = data.currentMatchday || 1;
+
+                    updateViews();
+                    setSyncStatus(true, "Cloud Synced ✅");
+                } else {
+                    generateDefaultSetup();
+                    if (window.isAdmin) {
+                        saveToCloud();
+                    } else {
+                        updateViews();
+                    }
+                }
+            }, (err) => {
+                console.error("Firestore Sync Error: ", err);
+                setSyncStatus(false, "Sync Lost");
+            });
+        }
+
+        async function saveToCloud() {
+            if (!isFirebaseActive) {
+                localStorage.setItem('efl_local_teams', JSON.stringify(window.teams));
+                localStorage.setItem('efl_local_fixtures', JSON.stringify(window.fixtures));
+                localStorage.setItem('efl_local_currentMatchday', window.currentMatchday.toString());
+                updateViews();
+                return;
+            }
+
+            if (!auth.currentUser) return;
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tournament', 'current_state');
+            try {
+                setSyncStatus(true, "Uploading...");
+                await setDoc(docRef, {
+                    teams: window.teams,
+                    fixtures: window.fixtures,
+                    currentMatchday: window.currentMatchday,
+                    lastUpdated: Date.now()
+                });
+                setSyncStatus(true, "Cloud Synced ✅");
+            } catch (err) {
+                console.error("Error writing to Firestore:", err);
+                setSyncStatus(false, "Upload Error");
+            }
+        }
+
+        function initLocalFallback() {
+            const lTeams = localStorage.getItem('efl_local_teams');
+            const lFixtures = localStorage.getItem('efl_local_fixtures');
+            const lMatchday = localStorage.getItem('efl_local_currentMatchday');
+
+            if (lTeams && lFixtures) {
+                window.teams = JSON.parse(lTeams);
+                window.fixtures = JSON.parse(lFixtures);
+                window.currentMatchday = parseInt(lMatchday) || 1;
+            } else {
+                generateDefaultSetup();
+            }
+            updateViews();
+        }
+
+        function generateDefaultSetup() {
+            window.teams = JSON.parse(JSON.stringify(defaultTeams));
+            generateSchedule();
+            window.currentMatchday = 1;
+        }
+
+        function generateSchedule() {
+            window.fixtures = [];
+            const N = window.teams.length;
+            
+            for (let round = 0; round < N - 1; round++) {
+                let matchesThisRound = [];
+                for (let i = 0; i < N / 2; i++) {
+                    let home = (round + i) % (N - 1);
+                    let away = (N - 1 - i + round) % (N - 1);
+                    
+                    if (i === 0) away = N - 1;
+
+                    const isHome = (round + i) % 2 === 0;
+                    const finalHome = isHome ? home : away;
+                    const finalAway = isHome ? away : home;
+
+                    matchesThisRound.push({
+                        id: `m-${round + 1}-${i + 1}`,
+                        homeId: window.teams[finalHome].id,
+                        awayId: window.teams[finalAway].id,
+                        homeScore: null,
+                        awayScore: null,
+                        played: false
+                    });
+                }
+                window.fixtures.push({
+                    matchday: round + 1,
+                    matches: matchesThisRound
+                });
+            }
+        }
+
+        function setSyncStatus(active, text) {
+            const indicator = document.getElementById('sync-indicator');
+            const statusText = document.getElementById('sync-text');
+            if (active) {
+                indicator.className = "w-1.5 h-1.5 rounded-full bg-[#00ff87] animate-pulse";
+            } else {
+                indicator.className = "w-1.5 h-1.5 rounded-full bg-[#e90052]";
+            }
+            statusText.innerText = text;
+        }
+
+        function updateViews() {
+            buildMatchdaySelectors();
+            renderActiveMatchday();
+            updateStandingsTable();
+            renderEditableTeamsTable();
+            updateGlobalProgress();
+            renderRoleVisibility();
+            lucide.createIcons();
+        }
+
+        function renderRoleVisibility() {
+            const roleBadge = document.getElementById('role-badge');
+            const adminBtn = document.getElementById('admin-action-btn');
+            const adminActions = document.getElementById('admin-actions-group');
+            const adminMatchdayControls = document.getElementById('admin-matchday-controls');
+            const userMatchdayInfo = document.getElementById('user-matchday-info-badge');
+            const adminSaveClubsBtn = document.getElementById('admin-save-clubs-btn');
+
+            if (window.isAdmin) {
+                roleBadge.className = "flex items-center gap-2 bg-[#00ff87]/10 border border-[#00ff87]/30 px-3 py-1.5 rounded-xl text-xs font-black text-[#00ff87]";
+                roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#00ff87]"></i> Admin Mode 🛠️`;
+                adminBtn.className = "flex items-center gap-1.5 bg-[#e90052]/20 hover:bg-[#e90052]/30 text-[#e90052] border border-[#e90052]/30 px-4 py-2 rounded-xl text-xs font-black transition-all shadow-md";
+                adminBtn.innerHTML = `<i data-lucide="log-out" class="w-3.5 h-3.5"></i> Admin Log out`;
+                
+                adminActions.classList.remove('hidden');
+                adminMatchdayControls.classList.remove('hidden');
+                userMatchdayInfo.classList.add('hidden');
+                if (adminSaveClubsBtn) adminSaveClubsBtn.classList.remove('hidden');
+            } else {
+                roleBadge.className = "flex items-center gap-2 bg-[#38003c]/60 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300";
+                roleBadge.innerHTML = `<i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i> Viewer Mode 👀`;
+                adminBtn.className = "flex items-center gap-1.5 bg-[#38003c] hover:bg-[#4d0c52] text-[#00ff87] border border-[#00ff87]/20 px-4 py-2 rounded-xl text-xs font-black transition-all shadow-md";
+                adminBtn.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin Login`;
+
+                adminActions.classList.add('hidden');
+                adminMatchdayControls.classList.add('hidden');
+                userMatchdayInfo.classList.remove('hidden');
+                if (adminSaveClubsBtn) adminSaveClubsBtn.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        window.openAdminModal = function() {
+            if (window.isAdmin) {
+                window.isAdmin = false;
+                showToast("Admin Mode မှ အောင်မြင်စွာ ထွက်ပြီးပါပြီ။");
+                updateViews();
+                return;
+            }
+            document.getElementById('admin-pin-input').value = "";
+            document.getElementById('login-error-text').classList.add('hidden');
+            document.getElementById('admin-login-modal').classList.remove('hidden');
+        };
+
+        window.closeAdminModal = function() {
+            document.getElementById('admin-login-modal').classList.add('hidden');
+        };
+
+        window.verifyAdminLogin = function() {
+            const entered = document.getElementById('admin-pin-input').value;
+            if (entered === adminPinCode) {
+                window.isAdmin = true;
+                showToast("Admin Dashboard သို့ ဝင်ရောက်ပြီးပါပြီ။");
+                closeAdminModal();
+                updateViews();
+            } else {
+                document.getElementById('login-error-text').classList.remove('hidden');
+            }
+        };
+
+        window.saveToCloudHandler = saveToCloud;
+        window.generateDefaultSetupHandler = generateDefaultSetup;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+        });
+    </script>
+
+    <script>
+        let currentTab = "fixtures";
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-slate-300 hover:text-white hover:bg-[#38003c]/50";
+            });
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+
+            const targetBtn = document.getElementById(`tab-${tabId}`);
+            targetBtn.className = "tab-btn flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-gradient-to-r from-[#e90052] to-[#38003c] text-white shadow-lg";
+            
+            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
+        }
+
+        function getTeam(id) {
+            return window.teams.find(t => t.id === id);
+        }
+
+        function buildMatchdaySelectors() {
+            const selectorHuge = document.getElementById('matchday-select-huge');
+            if (!selectorHuge) return;
+            selectorHuge.innerHTML = '';
+            for (let i = 1; i <= 11; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `Matchday ${i}`;
+                if (i === window.currentMatchday) opt.selected = true;
+                selectorHuge.appendChild(opt);
+            }
+        }
+
+        function changeMatchday(value) {
+            window.currentMatchday = parseInt(value);
+            document.getElementById('matchday-select-huge').value = window.currentMatchday;
+            renderActiveMatchday();
+        }
+
+        function prevMatchday() {
+            if (window.currentMatchday > 1) {
+                window.currentMatchday--;
+                document.getElementById('matchday-select-huge').value = window.currentMatchday;
+                renderActiveMatchday();
+            }
+        }
+
+        function nextMatchday() {
+            if (window.currentMatchday < 11) {
+                window.currentMatchday++;
+                document.getElementById('matchday-select-huge').value = window.currentMatchday;
+                renderActiveMatchday();
+            }
+        }
+
+        /* ==========================================
+           👇 <img src="..."> ကို အသုံးပြု၍ သတ်မှတ်ပုံကို တိုက်ရိုက်ဆွဲတင်ပြသမည့် Function ဖြစ်သည် 👇
+           ========================================== */
+        function getTeamLogoHTML(team, sizeClass = "w-14 h-14 text-sm") {
+            const hasLogo = team.src && team.src.trim() !== "";
+            return `
+                <div class="relative ${sizeClass} rounded-2xl overflow-hidden flex items-center justify-center shadow-lg bg-[#08000b] border border-white/5 flex-shrink-0">
+                    ${hasLogo ? `
+                        <img src="${team.src}" 
+                             alt="${team.short} Logo" 
+                             class="w-full h-full object-contain p-0.5" 
+                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    ` : ''}
+                    <!-- Fallback Background Block (အကယ်၍ ပုံမရှိပါက/ပုံမပေါ်ပါက ၎င်းနေရာတွင် အသင်းအတိုကောက် စာလုံးပြသပေးမည်ဖြစ်သည်) -->
+                    <div class="w-full h-full ${team.color} ${team.fontColor} flex items-center justify-center font-black tracking-wider ${hasLogo ? 'hidden' : ''}">
+                        ${team.short}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderActiveMatchday() {
+            const roundData = window.fixtures.find(f => f.matchday === window.currentMatchday);
+            if (!roundData) return;
+
+            const allPlayed = roundData.matches.every(m => m.played);
+            const statusBadge = document.getElementById('matchday-status-badge');
+            
+            if (allPlayed) {
+                statusBadge.innerText = 'ကစားပြီးပါပြီ';
+                statusBadge.className = "text-[10px] text-[#00ff87] bg-[#00ff87]/10 border border-[#00ff87]/20 px-2.5 py-1 rounded-full font-black";
+            } else {
+                statusBadge.innerText = 'မကစားရသေးပါ';
+                statusBadge.className = "text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full font-black";
+            }
+
+            const hugeGrid = document.getElementById('fixtures-huge-grid');
+            hugeGrid.innerHTML = '';
+
+            document.getElementById('mini-matchday-title').innerText = `Matchday ${window.currentMatchday} / 11`;
+
+            roundData.matches.forEach(match => {
+                const home = getTeam(match.homeId);
+                const away = getTeam(match.awayId);
+                const hasPlayed = match.played;
+                const hScoreDisplay = hasPlayed ? match.homeScore : '-';
+                const aScoreDisplay = hasPlayed ? match.awayScore : '-';
+
+                const matchCard = document.createElement('div');
+                matchCard.className = "glass-card p-6 rounded-3xl border border-white/5 hover:border-[#38003c] transition-all duration-300 relative overflow-hidden group flex flex-col justify-between min-h-[150px]";
+                
+                const controlsOverlay = window.isAdmin ? `
+                    <div class="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#08000b]/90 p-1 rounded-xl border border-white/10 shadow-xl z-20">
+                        <button onclick="openManualEditScore('${match.id}')" title="ရလဒ်ကိုယ်တိုင်ထည့်မည်" class="p-2 hover:bg-[#00ff87] hover:text-[#38003c] rounded-lg text-slate-300 transition-all">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="simulateSingleMatch('${match.id}')" title="အလိုအလျောက်ကစားမည်" class="p-2 hover:bg-[#00ff87] hover:text-[#38003c] rounded-lg text-slate-300 transition-all">
+                            <i data-lucide="play" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                ` : '';
+
+                matchCard.innerHTML = `
+                    <div class="flex items-center justify-between gap-4 z-10 my-auto">
+                        <!-- Home Side (Img Src render) -->
+                        <div class="flex-1 flex flex-col items-center text-center gap-2.5 min-w-0">
+                            ${getTeamLogoHTML(home, "w-14 h-14 text-sm")}
+                            <span class="font-black text-slate-100 text-xs sm:text-sm truncate w-full" title="${home.name}">${home.name}</span>
+                        </div>
+
+                        <!-- Scoreboard Center -->
+                        <div class="flex flex-col items-center gap-1.5 min-w-[100px]">
+                            <div class="flex items-center gap-2 bg-[#08000b] px-4 py-2 rounded-2xl border-2 border-[#38003c] shadow-inner">
+                                <span class="font-black text-xl sm:text-2xl score-font ${hasPlayed ? 'text-[#00ff87]' : 'text-slate-600'}">${hScoreDisplay}</span>
+                                <span class="text-xs text-slate-500 font-black">:</span>
+                                <span class="font-black text-xl sm:text-2xl score-font ${hasPlayed ? 'text-[#00ff87]' : 'text-slate-600'}">${aScoreDisplay}</span>
+                            </div>
+                            <span class="text-[9px] uppercase tracking-widest text-[#00ff87] font-black">VS</span>
+                        </div>
+
+                        <!-- Away Side (Img Src render) -->
+                        <div class="flex-1 flex flex-col items-center text-center gap-2.5 min-w-0">
+                            ${getTeamLogoHTML(away, "w-14 h-14 text-sm")}
+                            <span class="font-black text-slate-100 text-xs sm:text-sm truncate w-full" title="${away.name}">${away.name}</span>
+                        </div>
+                    </div>
+
+                    ${controlsOverlay}
+                `;
+                hugeGrid.appendChild(matchCard);
+            });
+
+            // Render Integrated Mini-Fixtures
+            const miniContainer = document.getElementById('mini-fixtures-container');
+            miniContainer.innerHTML = '';
+
+            roundData.matches.forEach(match => {
+                const home = getTeam(match.homeId);
+                const away = getTeam(match.awayId);
+                const hasPlayed = match.played;
+                const hScoreDisplay = hasPlayed ? match.homeScore : '-';
+                const aScoreDisplay = hasPlayed ? match.awayScore : '-';
+
+                const row = document.createElement('div');
+                row.className = "p-3 bg-[#38003c]/20 hover:bg-[#38003c]/50 border border-white/5 rounded-xl transition-all duration-300 flex items-center justify-between gap-2 relative group";
+                
+                const miniSimBtn = window.isAdmin ? `
+                    <div class="absolute right-1 top-1 hidden group-hover:flex items-center bg-[#08000b]/95 px-1 py-0.5 rounded-lg border border-white/10 shadow-lg z-10">
+                        <button onclick="simulateSingleMatch('${match.id}')" title="Simulate" class="p-1 hover:text-[#00ff87] text-slate-400 transition-colors">
+                            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                ` : '';
+
+                row.innerHTML = `
+                    <div class="flex-1 flex items-center gap-2 min-w-0">
+                        ${getTeamLogoHTML(home, "w-6 h-6 text-[9px]")}
+                        <span class="font-bold text-slate-200 text-xs truncate" title="${home.name}">${home.short}</span>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 px-2.5 py-0.5 bg-[#08000b] rounded-lg border border-white/5 justify-center">
+                        <span class="font-black text-xs score-font ${hasPlayed ? 'text-[#00ff87]' : 'text-slate-600'}">${hScoreDisplay}</span>
+                        <span class="text-[10px] text-slate-500 font-bold">:</span>
+                        <span class="font-black text-xs score-font ${hasPlayed ? 'text-[#00ff87]' : 'text-slate-600'}">${aScoreDisplay}</span>
+                    </div>
+
+                    <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right">
+                        <span class="font-bold text-slate-200 text-xs truncate" title="${away.name}">${away.short}</span>
+                        ${getTeamLogoHTML(away, "w-6 h-6 text-[9px]")}
+                    </div>
+
+                    ${miniSimBtn}
+                `;
+                miniContainer.appendChild(row);
+            });
+
+            lucide.createIcons();
+        }
+
+        function generateWeightedScore(ratingHome, ratingAway) {
+            const powerDiff = (ratingHome - ratingAway) / 10;
+            const lambdaHome = Math.max(0.5, 1.4 + powerDiff);
+            const lambdaAway = Math.max(0.5, 1.1 - powerDiff);
+
+            const poisson = (lambda) => {
+                let L = Math.exp(-lambda);
+                let k = 0;
+                let p = 1.0;
+                do {
+                    k++;
+                    p *= Math.random();
+                } while (p > L && k < 12);
+                return k - 1;
+            };
+
+            return {
+                home: poisson(lambdaHome),
+                away: poisson(lambdaAway)
+            };
+        }
+
+        function simulateSingleMatch(matchId, silent = false) {
+            if (!window.isAdmin) return;
+
+            let matchObj = null;
+            for (let day of window.fixtures) {
+                matchObj = day.matches.find(m => m.id === matchId);
+                if (matchObj) break;
+            }
+
+            if (!matchObj || matchObj.played) return;
+
+            const home = getTeam(matchObj.homeId);
+            const away = getTeam(matchObj.awayId);
+
+            const score = generateWeightedScore(home.rating, away.rating);
+            matchObj.homeScore = score.home;
+            matchObj.awayScore = score.away;
+            matchObj.played = true;
+
+            if (!silent) {
+                window.saveToCloudHandler();
+                AudioFX.playWhistle();
+                showToast(`${home.name} ${score.home} - ${score.away} ${away.name} ရလဒ်ထွက်ပေါ်လာပါပြီ။`);
+            }
+        }
+
+        function autoFillCurrentMatchday() {
+            if (!window.isAdmin) return;
+
+            const roundData = window.fixtures.find(f => f.matchday === window.currentMatchday);
+            if (!roundData) return;
+
+            let simulated = 0;
+            roundData.matches.forEach(m => {
+                if (!m.played) {
+                    simulateSingleMatch(m.id, true);
+                    simulated++;
+                }
+            });
+
+            if (simulated > 0) {
+                window.saveToCloudHandler();
+                AudioFX.playWhistle();
+                showToast(`ပွဲစဉ် (${window.currentMatchday}) ပါ ပွဲအားလုံးကို အမြန်ဆော့ကစားပြီးပါပြီ။`);
+            } else {
+                showToast(`ဤအပတ်စဉ်ရှိ ပွဲအားလုံး ကစားပြီး ဖြစ်ပါသည်။`);
+            }
+        }
+
+        function simulateFullLeague() {
+            if (!window.isAdmin) return;
+
+            let simulated = 0;
+            window.fixtures.forEach(day => {
+                day.matches.forEach(m => {
+                    if (!m.played) {
+                        simulateSingleMatch(m.id, true);
+                        simulated++;
+                    }
+                });
+            });
+
+            if (simulated > 0) {
+                window.saveToCloudHandler();
+                AudioFX.playWhistle();
+                showToast(`တစ်ရာသီလုံးပါ ပွဲစဉ်အားလုံး ကစားပြီးစီးသွားပါပြီ။ 🏆`);
+            } else {
+                showToast(`ပွဲစဉ်အားလုံး ကစားပြီး ဖြစ်ပါသည်။`);
+            }
+        }
+
+        let liveSimInterval = null;
+        function triggerLiveSimulation() {
+            if (!window.isAdmin) return;
+
+            const roundData = window.fixtures.find(f => f.matchday === window.currentMatchday);
+            if (!roundData) return;
+
+            const hasUnplayed = roundData.matches.some(m => !m.played);
+            if (!hasUnplayed) {
+                showToast(`ဤအပတ်စဉ်ရှိ ပွဲအားလုံး ကစားပြီး ဖြစ်ပါသည်။`);
+                return;
+            }
+
+            const container = document.getElementById('live-sim-matches-container');
+            container.innerHTML = '';
+            document.getElementById('live-sim-modal').classList.remove('hidden');
+            document.getElementById('close-sim-btn').classList.add('hidden');
+            document.getElementById('live-sim-timer').innerText = "00:00";
+            document.getElementById('live-commentary-text').innerText = "ပွဲစဉ်များ မကြာမီစတင်ပါတော့မည်...";
+            
+            AudioFX.playWhistle();
+
+            let matchStates = roundData.matches.map(match => {
+                const home = getTeam(match.homeId);
+                const away = getTeam(match.awayId);
+                
+                let simulatedScore = { home: 0, away: 0 };
+                if (!match.played) {
+                    simulatedScore = generateWeightedScore(home.rating, away.rating);
+                } else {
+                    simulatedScore = { home: match.homeScore, away: match.awayScore };
+                }
+
+                let goalTimeline = [];
+                for (let g = 0; g < simulatedScore.home; g++) {
+                    goalTimeline.push({ min: Math.floor(Math.random() * 90) + 1, side: 'home' });
+                }
+                for (let g = 0; g < simulatedScore.away; g++) {
+                    goalTimeline.push({ min: Math.floor(Math.random() * 90) + 1, side: 'away' });
+                }
+                goalTimeline.sort((a,b) => a.min - b.min);
+
+                return {
+                    originalMatch: match,
+                    home,
+                    away,
+                    currentHomeScore: match.played ? match.homeScore : 0,
+                    currentAwayScore: match.played ? match.awayScore : 0,
+                    goalTimeline: match.played ? [] : goalTimeline,
+                    playedBefore: match.played,
+                    isDone: match.played
+                };
+            });
+
+            matchStates.forEach((ms, index) => {
+                const row = document.createElement('div');
+                row.id = `live-sim-row-${index}`;
+                row.className = "p-4 bg-[#08000b] border border-[#38003c] rounded-2xl flex flex-col gap-3";
+                row.innerHTML = `
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex-1 flex items-center gap-2.5 min-w-0">
+                            <span class="w-1.5 h-6 rounded ${ms.home.color} flex-shrink-0"></span>
+                            <span class="font-bold text-slate-100 text-xs sm:text-sm truncate">${ms.home.name}</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-4 py-1.5 bg-[#1a0022] border border-[#38003c] rounded-xl">
+                            <span id="live-score-h-${index}" class="text-base font-black score-font text-[#00ff87]">${ms.currentHomeScore}</span>
+                            <span class="text-slate-500 font-bold text-xs">-</span>
+                            <span id="live-score-a-${index}" class="text-base font-black score-font text-[#00ff87]">${ms.currentAwayScore}</span>
+                        </div>
+                        <div class="flex-1 flex items-center justify-end gap-2.5 min-w-0 text-right">
+                            <span class="font-bold text-slate-100 text-xs sm:text-sm truncate">${ms.away.name}</span>
+                            <span class="w-1.5 h-6 rounded ${ms.away.color} flex-shrink-0"></span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 text-center flex flex-wrap justify-center gap-x-2" id="live-timeline-${index}">
+                        ${ms.playedBefore ? '<span class="text-slate-500">Full Time Match</span>' : 'ဆော့ကစားရန် အသင့်'}
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            let currentMinute = 0;
+            liveSimInterval = setInterval(() => {
+                currentMinute += 2;
+                if (currentMinute > 90) currentMinute = 90;
+
+                document.getElementById('live-sim-timer').innerText = `${currentMinute.toString().padStart(2, '0')}:00`;
+
+                matchStates.forEach((ms, idx) => {
+                    if (ms.isDone) return;
+
+                    let pendingGoals = ms.goalTimeline.filter(g => g.min <= currentMinute);
+                    if (pendingGoals.length > 0) {
+                        let newHome = pendingGoals.filter(g => g.side === 'home').length;
+                        let newAway = pendingGoals.filter(g => g.side === 'away').length;
+
+                        let scoreChanged = false;
+                        if (newHome > ms.currentHomeScore) {
+                            ms.currentHomeScore = newHome;
+                            document.getElementById(`live-score-h-${idx}`).innerText = newHome;
+                            scoreChanged = true;
+                        }
+                        if (newAway > ms.currentAwayScore) {
+                            ms.currentAwayScore = newAway;
+                            document.getElementById(`live-score-a-${idx}`).innerText = newAway;
+                            scoreChanged = true;
+                        }
+
+                        if (scoreChanged) {
+                            AudioFX.playGoal();
+                            const timelineDiv = document.getElementById(`live-timeline-${idx}`);
+                            timelineDiv.innerHTML = pendingGoals.map(g => `<span>⚽ ${g.side === 'home' ? ms.home.short : ms.away.short} (${g.min}')</span>`).join(', ');
+                            
+                            const lastGoal = pendingGoals[pendingGoals.length - 1];
+                            const scoringTeam = lastGoal.side === 'home' ? ms.home.name : ms.away.name;
+                            document.getElementById('live-commentary-text').innerText = `ဂိုးဝင်သွားပါပြီ! ${scoringTeam} အသင်းမှ ${lastGoal.min} မိနစ်တွင် ဂိုးသွင်းယူလိုက်သည်။`;
+                        }
+                    }
+
+                    if (currentMinute === 90) ms.isDone = true;
+                });
+
+                if (currentMinute >= 90) {
+                    clearInterval(liveSimInterval);
+                    AudioFX.playWhistle();
+
+                    matchStates.forEach(ms => {
+                        if (!ms.playedBefore) {
+                            ms.originalMatch.homeScore = ms.currentHomeScore;
+                            ms.originalMatch.awayScore = ms.currentAwayScore;
+                            ms.originalMatch.played = true;
+                        }
+                    });
+
+                    window.saveToCloudHandler();
+                    document.getElementById('live-commentary-text').innerText = "Matchday ပွဲစဉ်အားလုံး ပြီးဆုံးသွားပါပြီ။ ရမှတ်ဇယားများကို တွက်ချက်လိုက်ပါပြီ။";
+                    document.getElementById('close-sim-btn').classList.remove('hidden');
+                }
+            }, 180);
+        }
+
+        function closeLiveSimulation() {
+            if (liveSimInterval) clearInterval(liveSimInterval);
+            document.getElementById('live-sim-modal').classList.add('hidden');
+        }
+
+        function updateStandingsTable() {
+            if (!window.teams || window.teams.length === 0) return;
+
+            window.teams.forEach(t => {
+                t.played = 0;
+                t.won = 0;
+                t.drawn = 0;
+                t.lost = 0;
+                t.gf = 0;
+                t.ga = 0;
+                t.gd = 0;
+                t.pts = 0;
+                t.form = [];
+            });
+
+            window.fixtures.forEach(day => {
+                day.matches.forEach(match => {
+                    if (match.played) {
+                        const hTeam = getTeam(match.homeId);
+                        const aTeam = getTeam(match.awayId);
+
+                        hTeam.played++;
+                        aTeam.played++;
+
+                        hTeam.gf += match.homeScore;
+                        hTeam.ga += match.awayScore;
+                        aTeam.gf += match.awayScore;
+                        aTeam.ga += match.homeScore;
+
+                        if (match.homeScore > match.awayScore) {
+                            hTeam.won++;
+                            hTeam.pts += 3;
+                            hTeam.form.push('W');
+                            aTeam.lost++;
+                            aTeam.form.push('L');
+                        } else if (match.homeScore < match.awayScore) {
+                            aTeam.won++;
+                            aTeam.pts += 3;
+                            aTeam.form.push('W');
+                            hTeam.lost++;
+                            hTeam.form.push('L');
+                        } else {
+                            hTeam.drawn++;
+                            hTeam.pts += 1;
+                            hTeam.form.push('D');
+                            aTeam.drawn++;
+                            aTeam.pts += 1;
+                            aTeam.form.push('D');
+                        }
+
+                        hTeam.gd = hTeam.gf - hTeam.ga;
+                        aTeam.gd = aTeam.gf - aTeam.ga;
+                    }
+                });
+            });
+
+            const sortedTeams = [...window.teams].sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                if (b.gd !== a.gd) return b.gd - a.gd;
+                if (b.gf !== a.gf) return b.gf - a.gf;
+                return a.name.localeCompare(b.name);
+            });
+
+            const tbody = document.getElementById('standings-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            sortedTeams.forEach((team, index) => {
+                const rank = index + 1;
+                let rankClass = "text-slate-400";
+                let rowHighlight = "hover:bg-[#38003c]/10";
+
+                if (rank === 1) {
+                    rankClass = "text-[#00ff87] font-black scale-110";
+                    rowHighlight = "bg-[#00ff87]/5 hover:bg-[#00ff87]/10";
+                } else if (rank <= 4) {
+                    rankClass = "text-[#00ff87]/80 font-bold";
+                } else if (rank >= 11) {
+                    rowHighlight = "bg-[#e90052]/5 hover:bg-[#e90052]/10";
+                }
+
+                const last5Form = team.form.slice(-5);
+                const formHTML = last5Form.map(f => {
+                    if (f === 'W') return `<span class="w-4 h-4 rounded bg-[#00ff87] text-[#38003c] font-black text-[9px] flex items-center justify-center">W</span>`;
+                    if (f === 'L') return `<span class="w-4 h-4 rounded bg-[#e90052] text-white font-black text-[9px] flex items-center justify-center">L</span>`;
+                    return `<span class="w-4 h-4 rounded bg-amber-500 text-slate-950 font-black text-[9px] flex items-center justify-center">D</span>`;
+                }).join('');
+
+                const tr = document.createElement('tr');
+                tr.className = `${rowHighlight} border-b border-[#38003c]/20 transition-colors duration-300`;
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-center score-font ${rankClass}">${rank}</td>
+                    <td class="py-3.5 px-4 font-black text-slate-200">
+                        <div class="flex items-center gap-2.5">
+                            ${getTeamLogoHTML(team, "w-6 h-6 text-[9px]")}
+                            <span class="truncate max-w-[140px] sm:max-w-none">${team.name}</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-3 text-center text-slate-300 score-font">${team.played}</td>
+                    <td class="py-3.5 px-3 text-center text-[#00ff87] font-bold score-font">${team.won}</td>
+                    <td class="py-3.5 px-3 text-center text-amber-400 font-bold score-font">${team.drawn}</td>
+                    <td class="py-3.5 px-3 text-center text-[#e90052] font-bold score-font">${team.lost}</td>
+                    <td class="py-3.5 px-3 text-center text-slate-400 hidden sm:table-cell score-font">${team.gf}:${team.ga}</td>
+                    <td class="py-3.5 px-3 text-center font-bold score-font ${team.gd >= 0 ? 'text-slate-200' : 'text-[#e90052]'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
+                    <td class="py-3.5 px-4 text-center font-black text-[#00ff87] bg-[#00ff87]/5 score-font">${team.pts}</td>
+                    <td class="py-3.5 px-4 hidden md:table-cell">
+                        <div class="flex items-center justify-center gap-1">
+                            ${formHTML || '<span class="text-[10px] text-slate-500 font-bold">-</span>'}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (sortedTeams.length > 0) {
+                document.getElementById('leader-name').innerText = sortedTeams[0].name;
+            }
+
+            let totalLeagueGoals = 0;
+            window.teams.forEach(t => totalLeagueGoals += t.gf);
+            document.getElementById('total-goals').innerText = `${totalLeagueGoals / 2} ဂိုး`;
+        }
+
+        function openManualEditScore(matchId) {
+            if (!window.isAdmin) return;
+
+            let matchObj = null;
+            window.fixtures.forEach(day => {
+                const found = day.matches.find(m => m.id === matchId);
+                if (found) matchObj = found;
+            });
+
+            if (!matchObj) return;
+
+            const home = getTeam(matchObj.homeId);
+            const away = getTeam(matchObj.awayId);
+
+            document.getElementById('modal-match-id').value = matchId;
+            
+            const homeLogo = document.getElementById('modal-home-logo');
+            homeLogo.innerHTML = getTeamLogoHTML(home, "w-12 h-12 text-xs");
+
+            const awayLogo = document.getElementById('modal-away-logo');
+            awayLogo.innerHTML = getTeamLogoHTML(away, "w-12 h-12 text-xs");
+
+            document.getElementById('modal-home-name').innerText = home.name;
+            document.getElementById('modal-away-name').innerText = away.name;
+
+            document.getElementById('modal-home-score').value = matchObj.played ? matchObj.homeScore : 0;
+            document.getElementById('modal-away-score').value = matchObj.played ? matchObj.awayScore : 0;
+
+            document.getElementById('score-modal').classList.remove('hidden');
+        }
+
+        function closeScoreModal() {
+            document.getElementById('score-modal').classList.add('hidden');
+        }
+
+        function saveManualScore() {
+            if (!window.isAdmin) return;
+
+            const matchId = document.getElementById('modal-match-id').value;
+            const hScore = parseInt(document.getElementById('modal-home-score').value);
+            const aScore = parseInt(document.getElementById('modal-away-score').value);
+
+            if (isNaN(hScore) || isNaN(aScore) || hScore < 0 || aScore < 0) {
+                showToast('တရားဝင် ဂိုးပမာဏတစ်ခု ထည့်ပေးပါ။');
+                return;
+            }
+
+            let matchObj = null;
+            window.fixtures.forEach(day => {
+                const found = day.matches.find(m => m.id === matchId);
+                if (found) matchObj = found;
+            });
+
+            if (!matchObj) return;
+
+            matchObj.homeScore = hScore;
+            matchObj.awayScore = aScore;
+            matchObj.played = true;
+
+            window.saveToCloudHandler();
+            closeScoreModal();
+            AudioFX.playWhistle();
+            showToast('ရလဒ်ကို သိမ်းဆည်း တွက်ချက်ပြီးပါပြီ။');
+        }
+
+        function renderEditableTeamsTable() {
+            const tableBody = document.getElementById('teams-table-body');
+            if (!tableBody || !window.teams) return;
+            tableBody.innerHTML = '';
+
+            window.teams.forEach((team, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-[#38003c]/20 border-b border-[#38003c]/20 transition-colors";
+                
+                const nameContent = window.isAdmin ? `
+                    <input type="text" id="table-edit-name-${team.id}" value="${team.name}" class="w-full max-w-[200px] bg-[#08000b] hover:bg-[#1a0022] border border-[#38003c]/40 rounded-xl px-3 py-1.5 text-xs sm:text-sm text-slate-100 font-bold focus:outline-none focus:border-[#00ff87] transition-all">
+                ` : `
+                    <span class="text-xs sm:text-sm text-slate-200 font-black px-1">${team.name}</span>
+                `;
+
+                const shortContent = window.isAdmin ? `
+                    <input type="text" id="table-edit-short-${team.id}" value="${team.short}" max="3" class="w-16 bg-[#08000b] text-center hover:bg-[#1a0022] border border-[#38003c]/40 rounded-xl px-2 py-1.5 text-xs sm:text-sm text-[#00ff87] font-black focus:outline-none focus:border-[#00ff87] uppercase transition-all">
+                ` : `
+                    <span class="text-xs sm:text-sm text-[#00ff87] font-extrabold px-3">${team.short}</span>
+                `;
+
+                // Admin Mode - input text field directly for URL path/file name
+                const logoContent = window.isAdmin ? `
+                    <input type="text" id="table-edit-logo-${team.id}" value="${team.src || ''}" placeholder="ပုံရိပ်ဖိုင်အမည် (ဥပမာ: manunited.jpg) သို့မဟုတ် Link URL" class="w-full max-w-sm bg-[#08000b] hover:bg-[#1a0022] border border-[#38003c]/40 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-[#00ff87] transition-all">
+                ` : `
+                    <span class="text-xs text-slate-400 font-bold truncate max-w-[200px] block">${team.src || 'No Logo Set'}</span>
+                `;
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4 text-center font-bold text-slate-500 score-font">${index + 1}</td>
+                    <td class="py-4 px-4 font-black text-slate-200">
+                        <div class="flex items-center gap-3">
+                            ${getTeamLogoHTML(team, "w-8 h-8 text-[10px]")}
+                            ${nameContent}
+                        </div>
+                    </td>
+                    <td class="py-4 px-4">
+                        ${shortContent}
+                    </td>
+                    <td class="py-4 px-4">
+                        ${logoContent}
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function saveTeamsConfiguration() {
+            if (!window.isAdmin) return;
+
+            let updated = false;
+            window.teams.forEach(team => {
+                const nameInp = document.getElementById(`table-edit-name-${team.id}`);
+                const shortInp = document.getElementById(`table-edit-short-${team.id}`);
+                const logoInp = document.getElementById(`table-edit-logo-${team.id}`);
+
+                if (nameInp && shortInp) {
+                    const newName = nameInp.value.trim();
+                    const newShort = shortInp.value.trim().toUpperCase().slice(0, 3);
+                    const newLogo = logoInp ? logoInp.value.trim() : team.src;
+
+                    if (newName && newShort) {
+                        team.name = newName;
+                        team.short = newShort;
+                        team.src = newLogo;
+                        updated = true;
+                    }
+                }
+            });
+
+            if (updated) {
+                window.saveToCloudHandler();
+                showToast('အသင်းများ၏ အချက်အလက်များနှင့် လိုဂိုများကို သိမ်းဆည်းလိုက်ပါပြီ။');
+            }
+        }
+
+        function updateGlobalProgress() {
+            let totalMatches = 66;
+            let playedCount = 0;
+
+            if (!window.fixtures) return;
+
+            window.fixtures.forEach(day => {
+                day.matches.forEach(m => {
+                    if (m.played) playedCount++;
+                });
+            });
+
+            const percent = Math.round((playedCount / totalMatches) * 100);
+            document.getElementById('season-progress-text').innerText = `${percent}% (${playedCount}/66 ပွဲ)`;
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = text;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function triggerResetModal() {
+            if (!window.isAdmin) return;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function executeTournamentReset() {
+            if (!window.isAdmin) return;
+            window.generateDefaultSetupHandler();
+            window.saveToCloudHandler();
+            closeConfirmModal();
+            showToast('ပြိုင်ပွဲကို အောင်မြင်စွာ Reset ပြုလုပ်ပြီးပါပြီ။');
+        }
+    </script>
+</body>
+</html>
