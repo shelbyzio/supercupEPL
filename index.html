@@ -12,7 +12,6 @@
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #150020; }
         ::-webkit-scrollbar-thumb { background: #37003c; border-radius: 10px; }
-        .pl-neon-border { border-color: rgba(0, 255, 135, 0.15); }
         .scrollbar-hidden::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -22,7 +21,7 @@
         <div class="max-w-7xl mx-auto px-3 py-3 flex flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-2">
                 <div class="bg-white p-1 rounded-lg h-9 w-9 overflow-hidden flex items-center justify-center">
-                    <img src="https://p1.hiclipart.com/preview/885/76/910/premier-league-logo-fantasy-premier-league-sports-league-tottenham-hotspur-fc-chelsea-fc-football-manchester-city-fc-ukrainian-premier-league-png-clipart-thumbnail.jpg" alt="PL" class="h-full w-full object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="PL" class="h-full w-full object-contain">
                 </div>
                 <div>
                     <h1 class="text-sm font-black text-white">PREMIER <span class="text-[#00ff87]">LEAGUE</span></h1>
@@ -65,10 +64,23 @@
         </div>
 
         <div id="tab-standings-content" class="hidden space-y-4">
-            <div class="bg-[#15001a] border border-purple-950 rounded-xl overflow-hidden text-[10px]">
-                <table class="w-full text-center">
-                    <thead class="bg-[#37003c]/60"><tr><th class="py-3 px-1">#</th><th class="py-3 text-left">Club</th><th class="py-3">PL</th><th class="py-3">GD</th><th class="py-3 text-[#00ff87]">PTS</th></tr></thead>
-                    <tbody id="standings-table-body" class="divide-y divide-purple-950/40"></tbody>
+            <div class="bg-[#15001a] border border-purple-950 rounded-xl overflow-x-auto text-[10px]">
+                <table class="w-full text-center min-w-[500px]">
+                    <thead class="bg-[#37003c]/60">
+                        <tr class="text-slate-400">
+                            <th class="py-3 px-2">#</th>
+                            <th class="py-3 text-left pl-2">Club</th>
+                            <th class="py-3">MP</th>
+                            <th class="py-3">W</th>
+                            <th class="py-3">D</th>
+                            <th class="py-3">L</th>
+                            <th class="py-3 hidden sm:table-cell">GF</th>
+                            <th class="py-3 hidden sm:table-cell">GA</th>
+                            <th class="py-3">GD</th>
+                            <th class="py-3 text-[#00ff87]">PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standings-table-body" class="divide-y divide-purple-950/40 font-medium"></tbody>
                 </table>
             </div>
         </div>
@@ -76,26 +88,35 @@
 
     <script>
         const TEAMS_LIST = [
-            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Hemaljr10" },
-            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/iz_szlai" },
-            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/Phir_tayin" },
-            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Badrul11" },
-            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan" },
-            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/khantt453" },
-            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Doue998" },
-            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/Afgdggcghvc" },
-            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/Akkkk2000" },
-            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/jelium" },
-            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/DaweiBlay" },
-            { id: "EVE", name: "Everton", logo: "https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg", telegram: "https://t.me/waiyan2276" }
+            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Afgdggcghvc", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/iz_szlai", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/Phir_tayin", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Badrul11", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/khantt453", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Doue998", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/Hemaljr10", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/Akkkk2000", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/jelium", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/DaweiBlay", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+            { id: "EVE", name: "Everton", logo: "https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg", telegram: "https://t.me/waiyan2276", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }
         ];
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
-        window.onload = function() { generateFixedRoundRobinFixtures(); renderMatchdaySelector(); renderFixtures(); };
+
+        window.onload = function() { 
+            generateFixedRoundRobinFixtures(); 
+            renderMatchdaySelector(); 
+            renderFixtures(); 
+        };
 
         function switchTab(tab) {
             document.getElementById('tab-fixtures-content').classList.toggle('hidden', tab !== 'fixtures');
             document.getElementById('tab-standings-content').classList.toggle('hidden', tab !== 'standings');
+            
+            document.getElementById('tab-fixtures-btn').className = tab === 'fixtures' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
+            document.getElementById('tab-standings-btn').className = tab === 'standings' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
+
             if(tab === 'standings') updateStandingsTable();
         }
 
@@ -117,7 +138,13 @@
                 const btn = document.createElement('button');
                 btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === 0 ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
                 btn.innerText = `R${r + 1}`;
-                btn.onclick = () => { currentViewingMatchday = r; renderFixtures(); };
+                btn.onclick = () => { 
+                    currentViewingMatchday = r; 
+                    document.querySelectorAll('#matchday-selector-container button').forEach((b, idx) => {
+                        b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === r ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                    });
+                    renderFixtures(); 
+                };
                 container.appendChild(btn);
             }
         }
@@ -130,19 +157,54 @@
                 const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
-                card.innerHTML = `<div class="flex items-center gap-2"><img src="${h.logo}" class="w-8 h-8 object-contain"><span class="text-xs font-bold">${h.name}</span></div><span class="text-[#00ff87] font-black">VS</span><div class="flex items-center gap-2"><span class="text-xs font-bold">${a.name}</span><img src="${a.logo}" class="w-8 h-8 object-contain"></div>`;
+                card.innerHTML = `
+                    <div class="flex items-center gap-2 w-[40%]">
+                        <img src="${h.logo}" class="w-8 h-8 object-contain">
+                        <span class="text-xs font-bold truncate">${h.name}</span>
+                    </div>
+                    <span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>
+                    <div class="flex items-center gap-2 w-[40%] justify-end">
+                        <span class="text-xs font-bold truncate">${a.name}</span>
+                        <img src="${a.logo}" class="w-8 h-8 object-contain">
+                    </div>`;
                 container.appendChild(card);
             });
         }
 
         function updateStandingsTable() {
             const tbody = document.getElementById('standings-table-body');
-            tbody.innerHTML = TEAMS_LIST.map((team, idx) => `<tr><td class="py-3">${idx+1}</td><td class="text-left py-3">${team.name}</td><td class="py-3">0</td><td class="py-3">0</td><td class="py-3 font-bold text-[#00ff87]">0</td></tr>`).join('');
+            const sortedTeams = [...TEAMS_LIST].sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+            
+            tbody.innerHTML = sortedTeams.map((team, idx) => `
+                <tr class="hover:bg-[#37003c]/20 transition-colors">
+                    <td class="py-3 px-2">${idx+1}</td>
+                    <td class="text-left py-3 pl-2">
+                        <a href="${team.telegram}" target="_blank" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                            <img src="${team.logo}" class="w-5 h-5 object-contain">
+                            <span class="font-semibold text-white">${team.name}</span>
+                        </a>
+                    </td>
+                    <td class="py-3">${team.mp}</td>
+                    <td class="py-3">${team.w}</td>
+                    <td class="py-3">${team.d}</td>
+                    <td class="py-3">${team.l}</td>
+                    <td class="py-3 hidden sm:table-cell">${team.gf}</td>
+                    <td class="py-3 hidden sm:table-cell">${team.ga}</td>
+                    <td class="py-3">${team.gd}</td>
+                    <td class="py-3 font-black text-[#00ff87]">${team.pts}</td>
+                </tr>
+            `).join('');
         }
         
         function changeMatchday(d) {
             let n = currentViewingMatchday + d;
-            if (n >= 0 && n < TOTAL_ROUNDS) { currentViewingMatchday = n; renderFixtures(); }
+            if (n >= 0 && n < TOTAL_ROUNDS) { 
+                currentViewingMatchday = n; 
+                document.querySelectorAll('#matchday-selector-container button').forEach((b, idx) => {
+                    b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === n ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                });
+                renderFixtures(); 
+            }
         }
     </script>
 </body>
