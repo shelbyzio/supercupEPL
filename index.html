@@ -160,11 +160,11 @@
                 card.innerHTML = `
                     <div class="flex items-center gap-2 w-[40%]">
                         <img src="${h.logo}" class="w-8 h-8 object-contain">
-                        <span class="text-xs font-bold truncate">${h.name}</span>
+                        <a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${h.name}</a>
                     </div>
                     <span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>
                     <div class="flex items-center gap-2 w-[40%] justify-end">
-                        <span class="text-xs font-bold truncate">${a.name}</span>
+                        <a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${a.name}</a>
                         <img src="${a.logo}" class="w-8 h-8 object-contain">
                     </div>`;
                 container.appendChild(card);
