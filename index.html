@@ -104,11 +104,57 @@
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
 
+        // Custom Results Data for Round 1
+        const ROUND_1_RESULTS = [
+            { home: "MU", away: "EVE", hs: 4, as: 2 },
+            { home: "MC", away: "WOL", hs: 2, as: 1 },
+            { home: "ARS", away: "LEE", hs: 1, as: 8 },
+            { home: "LIV", away: "AVL", hs: 11, as: 1 },
+            { home: "CHE", away: "NEW", hs: 2, as: 2 },
+            { home: "TOT", away: "NFO", hs: null, as: null }
+        ];
+
         window.onload = function() { 
             generateFixedRoundRobinFixtures(); 
+            processRound1Results();
             renderMatchdaySelector(); 
             renderFixtures(); 
         };
+
+        function processRound1Results() {
+            ROUND_1_RESULTS.forEach(r => {
+                if (r.hs !== null && r.as !== null) {
+                    const homeTeam = TEAMS_LIST.find(t => t.id === r.home);
+                    const awayTeam = TEAMS_LIST.find(t => t.id === r.away);
+
+                    homeTeam.mp++;
+                    awayTeam.mp++;
+                    
+                    homeTeam.gf += r.hs;
+                    homeTeam.ga += r.as;
+                    awayTeam.gf += r.as;
+                    awayTeam.ga += r.hs;
+                    
+                    homeTeam.gd = homeTeam.gf - homeTeam.ga;
+                    awayTeam.gd = awayTeam.gf - awayTeam.ga;
+
+                    if (r.hs > r.as) {
+                        homeTeam.w++;
+                        homeTeam.pts += 3;
+                        awayTeam.l++;
+                    } else if (r.hs < r.as) {
+                        awayTeam.w++;
+                        awayTeam.pts += 3;
+                        homeTeam.l++;
+                    } else {
+                        homeTeam.d++;
+                        awayTeam.d++;
+                        homeTeam.pts += 1;
+                        awayTeam.pts += 1;
+                    }
+                }
+            });
+        }
 
         function switchTab(tab) {
             document.getElementById('tab-fixtures-content').classList.toggle('hidden', tab !== 'fixtures');
@@ -153,8 +199,21 @@
             const container = document.getElementById('fixtures-grid');
             container.innerHTML = '';
             document.getElementById('fixture-round-title').innerText = `ROUND ${currentViewingMatchday + 1}`;
+            
             fixtures[currentViewingMatchday].forEach(match => {
                 const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
+                
+                let scoreDisplay = '<span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>';
+                
+                if (currentViewingMatchday === 0) {
+                    const result = ROUND_1_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
+                    if (result && result.hs !== null) {
+                        const homeScore = result.home === h.id ? result.hs : result.as;
+                        const awayScore = result.home === h.id ? result.as : result.hs;
+                        scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${homeScore} - ${awayScore}</span>`;
+                    }
+                }
+
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
                 card.innerHTML = `
@@ -162,7 +221,7 @@
                         <img src="${h.logo}" class="w-8 h-8 object-contain">
                         <a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${h.name}</a>
                     </div>
-                    <span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>
+                    ${scoreDisplay}
                     <div class="flex items-center gap-2 w-[40%] justify-end">
                         <a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${a.name}</a>
                         <img src="${a.logo}" class="w-8 h-8 object-contain">
@@ -207,43 +266,5 @@
             }
         }
     </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
