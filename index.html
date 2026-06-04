@@ -110,16 +110,25 @@
             { home: "ARS", away: "LEE", hs: 1, as: 8 },
             { home: "LIV", away: "AVL", hs: 11, as: 1 },
             { home: "CHE", away: "NEW", hs: 1, as: 1 },
-            { home: "TOT", away: "NFO", hs: 0, as: 3 }
+            { home: "TOT", away: "NFO", hs: 2, as: 0 }
         ];
 
         const ROUND_2_RESULTS = [
             { home: "MC", away: "EVE", hs: 5, as: 2 },
             { home: "ARS", away: "MU", hs: 2, as: 2 },
             { home: "LIV", away: "WOL", hs: 12, as: 3 },
-            { home: "CHE", away: "LEE", hs: null, as: null },
-            { home: "TOT", away: "AVL", hs: 2, as: 0 },
+            { home: "CHE", away: "LEE", hs: 0, as: 3 },
+            { home: "TOT", away: "AVL", hs: 3, as: 0 },
             { home: "NEW", away: "NFO", hs: 6, as: 7 }
+        ];
+
+        const ROUND_3_RESULTS = [
+            { home: "EVE", away: "ARS", hs: 4, as: 2 },
+            { home: "MC", away: "LIV", hs: 4, as: 3 },
+            { home: "CHE", away: "MU", hs: 3, as: 1 },
+            { home: "TOT", away: "WOL", hs: 3, as: 1 },
+            { home: "NFO", away: "LEE", hs: 2, as: 4 },
+            { home: "NEW", away: "AVL", hs: 3, as: 0 }
         ];
 
         window.onload = function() { 
@@ -144,8 +153,10 @@
         }
 
         function processAllResults() {
+            TEAMS_LIST.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
             ROUND_1_RESULTS.forEach(processResult);
             ROUND_2_RESULTS.forEach(processResult);
+            ROUND_3_RESULTS.forEach(processResult);
         }
 
         function switchTab(tab) {
@@ -197,6 +208,7 @@
                 let result = null;
                 if (currentViewingMatchday === 0) result = ROUND_1_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 if (currentViewingMatchday === 1) result = ROUND_2_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
+                if (currentViewingMatchday === 2) result = ROUND_3_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 
                 if (result && result.hs !== null) {
                     const homeScore = result.home === h.id ? result.hs : result.as;
