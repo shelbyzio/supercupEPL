@@ -131,6 +131,15 @@
             { home: "NEW", away: "AVL", hs: 3, as: 0 }
         ];
 
+        const ROUND_4_RESULTS = [
+            { home: "LIV", away: "EVE", hs: null, as: null, status: 'cancelled' },
+            { home: "CHE", away: "ARS", hs: 4, as: 0 },
+            { home: "TOT", away: "MC", hs: 1, as: 2 },
+            { home: "NFO", away: "MU", hs: 0, as: 6 },
+            { home: "NEW", away: "WOL", hs: 2, as: 4 },
+            { home: "AVL", away: "LEE", hs: 1, as: 10 }
+        ];
+
         window.onload = function() { 
             generateFixedRoundRobinFixtures(); 
             processAllResults();
@@ -157,6 +166,7 @@
             ROUND_1_RESULTS.forEach(processResult);
             ROUND_2_RESULTS.forEach(processResult);
             ROUND_3_RESULTS.forEach(processResult);
+            ROUND_4_RESULTS.forEach(processResult);
         }
 
         function switchTab(tab) {
@@ -209,8 +219,11 @@
                 if (currentViewingMatchday === 0) result = ROUND_1_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 if (currentViewingMatchday === 1) result = ROUND_2_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 if (currentViewingMatchday === 2) result = ROUND_3_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
+                if (currentViewingMatchday === 3) result = ROUND_4_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 
-                if (result && result.hs !== null) {
+                if (result && result.status === 'cancelled') {
+                    scoreDisplay = '<span class="text-red-500 font-bold text-[8px] w-[20%] text-center uppercase">Cancelled</span>';
+                } else if (result && result.hs !== null) {
                     const homeScore = result.home === h.id ? result.hs : result.as;
                     const awayScore = result.home === h.id ? result.as : result.hs;
                     scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${homeScore} - ${awayScore}</span>`;
