@@ -88,57 +88,31 @@
 
     <script>
         const TEAMS_LIST = [
-            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Hemaljr10", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/iz_szlai", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/Phir_tayin", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Badrul11", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/khantt453", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Doue998", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/Afgdggcghvc", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/Akkkk2000", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/jelium", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/DaweiBlay", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
-            { id: "EVE", name: "Everton", logo: "https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg", telegram: "https://t.me/waiyan2276", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }
+            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Hemaljr10" },
+            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/iz_szlai" },
+            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/Phir_tayin" },
+            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Badrul11" },
+            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan" },
+            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/khantt453" },
+            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Doue998" },
+            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/Afgdggcghvc" },
+            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/Akkkk2000" },
+            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/jelium" },
+            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/DaweiBlay" },
+            { id: "EVE", name: "Everton", logo: "https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg", telegram: "https://t.me/waiyan2276" }
         ];
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
+        let standingsData = [];
 
-        const ROUND_1_RESULTS = [
-            { home: "MU", away: "EVE", hs: 4, as: 2 },
-            { home: "MC", away: "WOL", hs: 2, as: 1 },
-            { home: "ARS", away: "LEE", hs: 1, as: 8 },
-            { home: "LIV", away: "AVL", hs: 11, as: 1 },
-            { home: "CHE", away: "NEW", hs: 1, as: 1 },
-            { home: "TOT", away: "NFO", hs: 2, as: 0 }
-        ];
-
-        const ROUND_2_RESULTS = [
-            { home: "MC", away: "EVE", hs: 5, as: 2 },
-            { home: "ARS", away: "MU", hs: 2, as: 2 },
-            { home: "LIV", away: "WOL", hs: 12, as: 3 },
-            { home: "CHE", away: "LEE", hs: 0, as: 3 },
-            { home: "TOT", away: "AVL", hs: 3, as: 0 },
-            { home: "NEW", away: "NFO", hs: 6, as: 7 }
-        ];
-
-        const ROUND_3_RESULTS = [
-            { home: "EVE", away: "ARS", hs: 4, as: 2 },
-            { home: "MC", away: "LIV", hs: 4, as: 3 },
-            { home: "CHE", away: "MU", hs: 4, as: 4 },
-            { home: "TOT", away: "WOL", hs: 7, as: 0 },
-            { home: "NFO", away: "LEE", hs: 2, as: 4 },
-            { home: "NEW", away: "AVL", hs: 3, as: 0 }
-        ];
-
-        const ROUND_4_RESULTS = [
-            { home: "LIV", away: "EVE", hs: null, as: null, status: 'cancelled' },
-            { home: "CHE", away: "ARS", hs: 4, as: 0 },
-            { home: "TOT", away: "MC", hs: 1, as: 2 },
-            { home: "NFO", away: "MU", hs: 0, as: 6 },
-            { home: "NEW", away: "WOL", hs: 2, as: 4 },
-            { home: "AVL", away: "LEE", hs: 1, as: 10 }
-        ];
+        const RESULTS = {
+            0: [{ home: "MU", away: "EVE", hs: 4, as: 2 }, { home: "MC", away: "WOL", hs: 2, as: 1 }, { home: "ARS", away: "LEE", hs: 1, as: 8 }, { home: "LIV", away: "AVL", hs: 11, as: 1 }, { home: "CHE", away: "NEW", hs: 1, as: 1 }, { home: "TOT", away: "NFO", hs: 2, as: 0 }],
+            1: [{ home: "MC", away: "EVE", hs: 5, as: 2 }, { home: "ARS", away: "MU", hs: 2, as: 2 }, { home: "LIV", away: "WOL", hs: 12, as: 3 }, { home: "CHE", away: "LEE", hs: 0, as: 3 }, { home: "TOT", away: "AVL", hs: 3, as: 0 }, { home: "NEW", away: "NFO", hs: 6, as: 7 }],
+            2: [{ home: "EVE", away: "ARS", hs: 4, as: 2 }, { home: "MC", away: "LIV", hs: 4, as: 3 }, { home: "CHE", away: "MU", hs: 4, as: 4 }, { home: "TOT", away: "WOL", hs: 7, as: 0 }, { home: "NFO", away: "LEE", hs: 2, as: 4 }, { home: "NEW", away: "AVL", hs: 3, as: 0 }],
+            3: [{ home: "LIV", away: "EVE", hs: 3, as: 3 }, { home: "CHE", away: "ARS", hs: 4, as: 0 }, { home: "TOT", away: "MC", hs: 1, as: 2 }, { home: "NFO", away: "MU", hs: 0, as: 6 }, { home: "NEW", away: "WOL", hs: 2, as: 4 }, { home: "AVL", away: "LEE", hs: 1, as: 10 }],
+            4: [{ home: "EVE", away: "CHE", hs: 0, as: 4 }, { home: "ARS", away: "NFO", hs: 0, as: 3 }, { home: "TOT", away: "LIV", hs: 0, as: 7 }, { home: "AVL", away: "MU", hs: 1, as: 6 }, { home: "WOL", away: "LEE", hs: 1, as: 6 }, { home: "NEW", away: "MC", hs: 0, as: 6 }],
+            5: [{ home: "TOT", away: "EVE", hs: 5, as: 3 }, { home: "NFO", away: "CHE", hs: 0, as: 3 }, { home: "NEW", away: "LIV", hs: 0, as: 3 }, { home: "AVL", away: "ARS", hs: 9, as: 2 }, { home: "LEE", away: "MC", hs: 7, as: 6 }, { home: "WOL", away: "MU", hs: 0, as: 5 }]
+        };
 
         window.onload = function() { 
             generateFixedRoundRobinFixtures(); 
@@ -147,26 +121,17 @@
             renderFixtures(); 
         };
 
-        function processResult(res) {
-            if (res.hs === null) return;
-            const homeTeam = TEAMS_LIST.find(t => t.id === res.home);
-            const awayTeam = TEAMS_LIST.find(t => t.id === res.away);
-            homeTeam.mp++; awayTeam.mp++;
-            homeTeam.gf += res.hs; homeTeam.ga += res.as;
-            awayTeam.gf += res.as; awayTeam.ga += res.hs;
-            homeTeam.gd = homeTeam.gf - homeTeam.ga;
-            awayTeam.gd = awayTeam.gf - awayTeam.ga;
-            if (res.hs > res.as) { homeTeam.w++; homeTeam.pts += 3; awayTeam.l++; } 
-            else if (res.hs < res.as) { awayTeam.w++; awayTeam.pts += 3; homeTeam.l++; } 
-            else { homeTeam.d++; awayTeam.d++; homeTeam.pts += 1; awayTeam.pts += 1; }
-        }
-
         function processAllResults() {
-            TEAMS_LIST.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
-            ROUND_1_RESULTS.forEach(processResult);
-            ROUND_2_RESULTS.forEach(processResult);
-            ROUND_3_RESULTS.forEach(processResult);
-            ROUND_4_RESULTS.forEach(processResult);
+            standingsData = TEAMS_LIST.map(t => ({ ...t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }));
+            Object.values(RESULTS).forEach(round => {
+                round.forEach(res => {
+                    if (res.hs === null) return;
+                    const h = standingsData.find(t => t.id === res.home), a = standingsData.find(t => t.id === res.away);
+                    h.mp++; a.mp++; h.gf += res.hs; h.ga += res.as; a.gf += res.as; a.ga += res.hs;
+                    h.gd = h.gf - h.ga; a.gd = a.gf - a.ga;
+                    if (res.hs > res.as) { h.w++; h.pts += 3; a.l++; } else if (res.hs < res.as) { a.w++; a.pts += 3; h.l++; } else { h.d++; a.d++; h.pts += 1; a.pts += 1; }
+                });
+            });
         }
 
         function switchTab(tab) {
@@ -210,63 +175,44 @@
             const container = document.getElementById('fixtures-grid');
             container.innerHTML = '';
             document.getElementById('fixture-round-title').innerText = `ROUND ${currentViewingMatchday + 1}`;
+            const roundData = fixtures[currentViewingMatchday];
+            const roundResults = RESULTS[currentViewingMatchday] || [];
             
-            fixtures[currentViewingMatchday].forEach(match => {
+            roundData.forEach(match => {
                 const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
+                const res = roundResults.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
+                
                 let scoreDisplay = '<span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>';
-                
-                let result = null;
-                if (currentViewingMatchday === 0) result = ROUND_1_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
-                if (currentViewingMatchday === 1) result = ROUND_2_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
-                if (currentViewingMatchday === 2) result = ROUND_3_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
-                if (currentViewingMatchday === 3) result = ROUND_4_RESULTS.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
-                
-                if (result && result.status === 'cancelled') {
-                    scoreDisplay = '<span class="text-red-500 font-bold text-[8px] w-[20%] text-center uppercase">Cancelled</span>';
-                } else if (result && result.hs !== null) {
-                    const homeScore = result.home === h.id ? result.hs : result.as;
-                    const awayScore = result.home === h.id ? result.as : result.hs;
-                    scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${homeScore} - ${awayScore}</span>`;
+                if (res) {
+                    if (res.status === 'cancelled') scoreDisplay = '<span class="text-red-500 font-bold text-[8px] w-[20%] text-center uppercase">Cancelled</span>';
+                    else if (res.hs !== null) {
+                        const hs = res.home === h.id ? res.hs : res.as;
+                        const as = res.home === h.id ? res.as : res.hs;
+                        scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${hs} - ${as}</span>`;
+                    }
                 }
 
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
                 card.innerHTML = `
-                    <div class="flex items-center gap-2 w-[40%]">
-                        <img src="${h.logo}" class="w-8 h-8 object-contain">
-                        <a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${h.name}</a>
-                    </div>
+                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
                     ${scoreDisplay}
-                    <div class="flex items-center gap-2 w-[40%] justify-end">
-                        <a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] transition-colors">${a.name}</a>
-                        <img src="${a.logo}" class="w-8 h-8 object-contain">
-                    </div>`;
+                    <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain"></div>`;
                 container.appendChild(card);
             });
         }
 
         function updateStandingsTable() {
             const tbody = document.getElementById('standings-table-body');
-            const sortedTeams = [...TEAMS_LIST].sort((a, b) => b.pts - a.pts || b.gd - a.gd);
-            tbody.innerHTML = sortedTeams.map((team, idx) => `
-                <tr class="hover:bg-[#37003c]/20 transition-colors">
-                    <td class="py-3 px-2">${idx+1}</td>
-                    <td class="text-left py-3 pl-2">
-                        <a href="${team.telegram}" target="_blank" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                            <img src="${team.logo}" class="w-5 h-5 object-contain">
-                            <span class="font-semibold text-white">${team.name}</span>
-                        </a>
-                    </td>
-                    <td class="py-3">${team.mp}</td>
-                    <td class="py-3">${team.w}</td>
-                    <td class="py-3">${team.d}</td>
-                    <td class="py-3">${team.l}</td>
-                    <td class="py-3 hidden sm:table-cell">${team.gf}</td>
-                    <td class="py-3 hidden sm:table-cell">${team.ga}</td>
-                    <td class="py-3">${team.gd}</td>
-                    <td class="py-3 font-black text-[#00ff87]">${team.pts}</td>
-                </tr>
-            `).join('');
+            const sorted = [...standingsData].sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+            tbody.innerHTML = sorted.map((t, i) => `
+                <tr class="hover:bg-[#37003c]/20">
+                    <td class="py-3 px-2">${i+1}</td>
+                    <td class="text-left py-3 pl-2"><a href="${t.telegram}" target="_blank" class="flex items-center gap-2"><img src="${t.logo}" class="w-5 h-5 object-contain"><span class="font-semibold text-white">${t.name}</span></a></td>
+                    <td class="py-3">${t.mp}</td><td class="py-3">${t.w}</td><td class="py-3">${t.d}</td><td class="py-3">${t.l}</td>
+                    <td class="py-3 hidden sm:table-cell">${t.gf}</td><td class="py-3 hidden sm:table-cell">${t.ga}</td>
+                    <td class="py-3">${t.gd}</td><td class="py-3 font-black text-[#00ff87]">${t.pts}</td>
+                </tr>`).join('');
         }
         
         function changeMatchday(d) {
