@@ -113,7 +113,8 @@
             4: [{ home: "EVE", away: "CHE", hs: 0, as: 4 }, { home: "ARS", away: "NFO", hs: 3, as: 0 }, { home: "TOT", away: "LIV", hs: 0, as: 7 }, { home: "AVL", away: "MU", hs: 1, as: 6 }, { home: "WOL", away: "LEE", hs: 1, as: 6 }, { home: "NEW", away: "MC", hs: 0, as: 6 }],
             5: [{ home: "TOT", away: "EVE", hs: 5, as: 3 }, { home: "NFO", away: "CHE", hs: 0, as: 3 }, { home: "NEW", away: "LIV", hs: 0, as: 3 }, { home: "AVL", away: "ARS", hs: 9, as: 2 }, { home: "LEE", away: "MC", hs: 7, as: 6 }, { home: "WOL", away: "MU", hs: 0, as: 5 }],
             6: [{ home: "NFO", away: "EVE", hs: 2, as: 5 }, { home: "NEW", away: "TOT", hs: 0, as: 3 }, { home: "AVL", away: "CHE", hs: 1, as: 3 }, { home: "LEE", away: "LIV", hs: 4, as: 3 }, { home: "WOL", away: "ARS", hs: 3, as: 7 }, { home: "MU", away: "MC", hs: 2, as: 2 }],
-            7: [{ home: "NEW", away: "EVE", hs: 0, as: 3 }, { home: "AVL", away: "NFO", hs: 3, as: 0 }, { home: "LEE", away: "TOT", hs: 4, as: 0 }, { home: "WOL", away: "CHE", hs: null, as: null, status: 'cancelled' }, { home: "MU", away: "LIV", hs: 1, as: 4 }, { home: "MC", away: "ARS", hs: 13, as: 0 }]
+            7: [{ home: "NEW", away: "EVE", hs: 0, as: 3 }, { home: "AVL", away: "NFO", hs: 3, as: 0 }, { home: "LEE", away: "TOT", hs: 4, as: 0 }, { home: "WOL", away: "CHE", hs: 4, as: 2 }, { home: "MU", away: "LIV", hs: 1, as: 4 }, { home: "MC", away: "ARS", hs: 13, as: 0 }],
+            8: [{ home: "AVL", away: "EVE", hs: 3, as: 0 }, { home: "LEE", away: "NEW", hs: 3, as: 0 }, { home: "WOL", away: "NFO", hs: 3, as: 0 }, { home: "MU", away: "TOT", hs: 0, as: 4 }, { home: "MC", away: "CHE", hs: 3, as: 0 }, { home: "ARS", away: "LIV", hs: 0, as: 3 }]
         };
 
         window.onload = function() { 
@@ -129,6 +130,7 @@
                 round.forEach(res => {
                     if (res.hs === null) return;
                     const h = standingsData.find(t => t.id === res.home), a = standingsData.find(t => t.id === res.away);
+                    if(!h || !a) return;
                     h.mp++; a.mp++; h.gf += res.hs; h.ga += res.as; a.gf += res.as; a.ga += res.hs;
                     h.gd = h.gf - h.ga; a.gd = a.gf - a.ga;
                     if (res.hs > res.as) { h.w++; h.pts += 3; a.l++; } else if (res.hs < res.as) { a.w++; a.pts += 3; h.l++; } else { h.d++; a.d++; h.pts += 1; a.pts += 1; }
