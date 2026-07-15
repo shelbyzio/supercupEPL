@@ -88,112 +88,111 @@
 
     <script>
         const TEAMS_LIST = [
-            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Aungpyinnyar" },
-            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/Wallker29" },
-            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/EUREKA011775" },
-            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Theinwinn2000" },
-            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/kelvintun" },
-            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/Kuyy2010" },
-            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Arkar_myint_win" },
-            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/Arshiq2003" },
-            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/mervin56" },
-            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/ZawHtetLing" },
-            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/lord_voldemort101" },
-            { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Saimonaon" }
+            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Nyan428925" },
+            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/" },
+            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/kenzjust" },
+            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Nikakmt" },
+            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan" },
+            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/Pyaephyokyaw255" },
+            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/" },
+            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/" },
+            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/MayJu2004" },
+            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/ptkyaw87" },
+            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/KlKhaing12" },
+            { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Heropool" }
         ];
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
         let standingsData = [];
 
-        // Result အသစ်များထည့်ရန် Format (Vertical):
         const RESULTS = {
             0: [
-                { home: "MU", away: "BRI", hs: 1, as: 4 },
-                { home: "MC", away: "WOL", hs: 0, as: 11 },
-                { home: "ARS", away: "LEE", hs: 3, as: 0 },
-                { home: "LIV", away: "AVL", hs: 3, as: 3 },
-                { home: "CHE", away: "NEW", hs: 2, as: 4 },
-                { home: "TOT", away: "NFO", hs: 3, as: 2 }
+                { home: "MU", away: "BRI" },
+                { home: "MC", away: "WOL" },
+                { home: "ARS", away: "LEE" },
+                { home: "LIV", away: "AVL" },
+                { home: "CHE", away: "NEW" },
+                { home: "TOT", away: "NFO" }
             ],
             1: [
-                { home: "MC", away: "BRI", hs: 4, as: 1 },
-                { home: "ARS", away: "MU", hs: 5, as: 1 },
-                { home: "LIV", away: "WOL", hs: 0, as: 6 },
-                { home: "CHE", away: "LEE", hs: 3, as: 0 },
-                { home: "TOT", away: "AVL", hs: 0, as: 2 },
-                { home: "NEW", away: "NFO", hs: 1, as: 1 }
+                { home: "MC", away: "BRI" },
+                { home: "ARS", away: "MU" },
+                { home: "LIV", away: "WOL" },
+                { home: "CHE", away: "LEE" },
+                { home: "TOT", away: "AVL" },
+                { home: "NEW", away: "NFO" }
             ],
             2: [
-                { home: "BRI", away: "ARS", hs: 2, as: 1 },
-                { home: "MC", away: "LIV", hs: 1, as: 3 },
-                { home: "CHE", away: "MU", hs: 1, as: 2 },
-                { home: "TOT", away: "WOL", hs: 2, as: 6 },
-                { home: "NFO", away: "LEE", hs: 0, as: 3 },
-                { home: "NEW", away: "AVL", hs: 3, as: 3 }
+                { home: "BRI", away: "ARS" },
+                { home: "MC", away: "LIV" },
+                { home: "CHE", away: "MU" },
+                { home: "TOT", away: "WOL" },
+                { home: "NFO", away: "LEE" },
+                { home: "NEW", away: "AVL" }
             ],
             3: [
-                { home: "LIV", away: "BRI", hs: 3, as: 6 },
-                { home: "CHE", away: "ARS", hs: 6, as: 5 },
-                { home: "TOT", away: "MC", hs: 1, as: 2 },
-                { home: "NFO", away: "MU", hs: 3, as: 4 },
-                { home: "NEW", away: "WOL", hs: 3, as: 5 },
-                { home: "AVL", away: "LEE", hs: 3, as: 4 }
+                { home: "LIV", away: "BRI" },
+                { home: "CHE", away: "ARS" },
+                { home: "TOT", away: "MC" },
+                { home: "NFO", away: "MU" },
+                { home: "NEW", away: "WOL" },
+                { home: "AVL", away: "LEE" }
             ],
             4: [
-                { home: "BRI", away: "CHE", hs: 4, as: 1 },
-                { home: "ARS", away: "NFO", hs: 4, as: 7 },
-                { home: "TOT", away: "LIV", hs: 4, as: 3 },
-                { home: "AVL", away: "MU", hs: 3, as: 1 },
-                { home: "WOL", away: "LEE", hs: 5 , as: 1 },
-                { home: "NEW", away: "MC", hs: 0, as: 1 }
+                { home: "BRI", away: "CHE" },
+                { home: "ARS", away: "NFO" },
+                { home: "TOT", away: "LIV" },
+                { home: "AVL", away: "MU" },
+                { home: "WOL", away: "LEE" },
+                { home: "NEW", away: "MC" }
             ],
             5: [
-                { home: "TOT", away: "BRI", hs: 3, as: 4 },
-                { home: "NFO", away: "CHE", hs: 2, as: 3 },
-                { home: "NEW", away: "LIV", hs: 0, as: 3 },
-                { home: "AVL", away: "ARS", hs: 3, as: 8 },
-                { home: "LEE", away: "MC", hs: 4, as: 1 },
-                { home: "WOL", away: "MU", hs: 2, as: 1 }
+                { home: "TOT", away: "BRI" },
+                { home: "NFO", away: "CHE" },
+                { home: "NEW", away: "LIV" },
+                { home: "AVL", away: "ARS" },
+                { home: "LEE", away: "MC" },
+                { home: "WOL", away: "MU" }
             ],
             6: [
-                { home: "NFO", away: "BRI", hs: 3, as: 1 },
-                { home: "NEW", away: "TOT", hs: 3, as: 2 },
-                { home: "AVL", away: "CHE", hs: 6, as: 4 },
-                { home: "LEE", away: "LIV", hs: 3, as: 1 },
-                { home: "WOL", away: "ARS", hs: 5, as: 2 },
-                { home: "MU", away: "MC", hs: 3, as: 2 }
+                { home: "NFO", away: "BRI" },
+                { home: "NEW", away: "TOT" },
+                { home: "AVL", away: "CHE" },
+                { home: "LEE", away: "LIV" },
+                { home: "WOL", away: "ARS" },
+                { home: "MU", away: "MC" }
             ],
             7: [
-                { home: "NEW", away: "BRI", hs: 2, as: 2 },
-                { home: "AVL", away: "NFO", hs: 4, as: 3 },
-                { home: "LEE", away: "TOT", hs: 3, as: 2 },
-                { home: "WOL", away: "CHE", hs: 9, as: 1 },
-                { home: "MU", away: "LIV", hs: 3, as: 2 },
-                { home: "MC", away: "ARS", hs: 1, as: 0 }
+                { home: "NEW", away: "BRI" },
+                { home: "AVL", away: "NFO" },
+                { home: "LEE", away: "TOT" },
+                { home: "WOL", away: "CHE" },
+                { home: "MU", away: "LIV" },
+                { home: "MC", away: "ARS" }
             ],
             8: [
-                { home: "AVL", away: "BRI", hs: 5, as: 1 },
-                { home: "LEE", away: "NEW", hs: 2, as: 5 },
-                { home: "WOL", away: "NFO", hs: 6, as: 2 },
-                { home: "MU", away: "TOT", hs: 3, as: 8 },
-                { home: "MC", away: "CHE", hs: 2, as: 3 },
-                { home: "ARS", away: "LIV", hs: 2, as: 1 }
+                { home: "AVL", away: "BRI" },
+                { home: "LEE", away: "NEW" },
+                { home: "WOL", away: "NFO" },
+                { home: "MU", away: "TOT" },
+                { home: "MC", away: "CHE" },
+                { home: "ARS", away: "LIV" }
             ],
             9: [
-                { home: "LEE", away: "BRI", hs: 2, as: 1 },
-                { home: "WOL", away: "AVL", hs: 12, as: 2 },
-                { home: "MU", away: "NEW", hs: 1, as: 3 },
-                { home: "MC", away: "NFO", hs: 5, as: 10 },
-                { home: "ARS", away: "TOT", hs: 7, as: 2 },
-                { home: "LIV", away: "CHE", hs: 4, as: 2 }
+                { home: "LEE", away: "BRI" },
+                { home: "WOL", away: "AVL" },
+                { home: "MU", away: "NEW" },
+                { home: "MC", away: "NFO" },
+                { home: "ARS", away: "TOT" },
+                { home: "LIV", away: "CHE" }
             ],
             10: [
-                { home: "WOL", away: "BRI", hs: 3, as: 2 },
-                { home: "MU", away: "LEE", hs: 3, as: 2 },
-                { home: "MC", away: "AVL", hs: 1, as: 3 },
-                { home: "ARS", away: "NEW", hs: 5, as: 2 },
-                { home: "LIV", away: "NFO", hs: 1, as: 1 },
-                { home: "CHE", away: "TOT", hs: 3, as: 0 }
+                { home: "WOL", away: "BRI" },
+                { home: "MU", away: "LEE" },
+                { home: "MC", away: "AVL" },
+                { home: "ARS", away: "NEW" },
+                { home: "LIV", away: "NFO" },
+                { home: "CHE", away: "TOT" }
             ]
         };
 
@@ -208,7 +207,7 @@
             standingsData = TEAMS_LIST.map(t => ({ ...t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }));
             Object.values(RESULTS).forEach(round => {
                 round.forEach(res => {
-                    if (res.hs === null) return;
+                    if (res.hs === undefined) return;
                     const h = standingsData.find(t => t.id === res.home), a = standingsData.find(t => t.id === res.away);
                     if(!h || !a) return;
                     h.mp++; a.mp++; h.gf += res.hs; h.ga += res.as; a.gf += res.as; a.ga += res.hs;
@@ -267,7 +266,7 @@
                 const res = roundResults.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
                 
                 let scoreDisplay = '<span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>';
-                if (res && res.hs !== null) {
+                if (res && res.hs !== undefined) {
                     const hs = res.home === h.id ? res.hs : res.as;
                     const as = res.home === h.id ? res.as : res.hs;
                     scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${hs} - ${as}</span>`;
