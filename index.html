@@ -130,7 +130,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCG8xdfNHBFKo1VlfBYCYZTP-8vid3R97I",
@@ -138,29 +139,28 @@
             projectId: "superepl",
             storageBucket: "superepl.firebasestorage.app",
             messagingSenderId: "885676848744",
-            appId: "1:885676848744:web:ac9f912c3f06ecd3c2eddd",
-            measurementId: "G-FNDM2JKVH9"
+            appId: "1:885676848744:web:c13a2ef4e370adafc2eddd",
+            measurementId: "G-SVKV23ZZS2"
         };
 
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
         const TEAMS_LIST = [
-            
-    { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Wolfy21002" },
-    { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/Sammykaung" },
-    { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/bobominhein" },
-    { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/MGYeye1473" },
-    { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/Sanminoo" },
-    { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/iz_szlai" },
-    { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Aung19959" },
-    { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/zeusace0" },
-    { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/aamk79" },
-    { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/" },
-    { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/MoungNaing" },
-    { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Naindjjd" }
-
+            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Wolfy21002" },
+            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/Sammykaung" },
+            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/bobominhein" },
+            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/MGYeye1473" },
+            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/Sanminoo" },
+            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/iz_szlai" },
+            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Aung19959" },
+            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/zeusace0" },
+            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/aamk79" },
+            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/" },
+            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/MoungNaing" },
+            { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Naindjjd" }
         ];
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
@@ -183,7 +183,6 @@
                     await signInAnonymously(auth);
                 }
                 
-                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
                 const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
                 
                 onSnapshot(docRef, (docSnap) => {
@@ -384,7 +383,7 @@
         };
 
         window.saveAllResults = async function() {
-            const roundIdx = parseInt(document.getElementById('admin-round-select-select') || document.getElementById('admin-round-select').value);
+            const roundIdx = parseInt(document.getElementById('admin-round-select').value);
             const container = document.getElementById('admin-matches-container');
             const hInputs = container.querySelectorAll('.hs-input');
             const aInputs = container.querySelectorAll('.as-input');
@@ -395,7 +394,6 @@
                 const away = hInputs[i].getAttribute('data-away');
                 const hsVal = hInputs[i].value;
                 const asVal = aInputs[i].value;
-                newRoundResults.post = true; // dummy prop or direct assignment
                 newRoundResults.push({
                     home: home,
                     away: away,
@@ -410,7 +408,6 @@
             updateStandingsTable();
 
             try {
-                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
                 const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
                 await setDoc(docRef, { results: RESULTS });
                 closeAdminModal();
