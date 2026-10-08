@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premier League Style 12-Team Tournament Hub</title>
+    <title>Spain La Liga - Tournament Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #0c0014; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #150020; }
-        ::-webkit-scrollbar-thumb { background: #37003c; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .scrollbar-hidden::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col">
-    <header class="bg-[#37003c] border-b-4 border-[#00ff87] sticky top-0 z-50 shadow-2xl">
+<body class="text-slate-800 min-h-screen flex flex-col">
+    <!-- Header with Clean White & Bold Red Theme -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-3 py-3 flex flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-2">
-                <div class="bg-white p-1 rounded-lg h-9 w-9 overflow-hidden flex items-center justify-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="PL" class="h-full w-full object-contain" crossorigin="anonymous">
+                <div class="bg-red-600 p-1.5 rounded-xl h-9 w-9 overflow-hidden flex items-center justify-center text-white shadow-md shadow-red-600/20">
+                    <i class="fa-solid fa-trophy text-sm"></i>
                 </div>
                 <div>
-                    <h1 class="text-sm font-black text-white">PREMIER <span class="text-[#00ff87]">LEAGUE</span></h1>
-                    <p class="text-[8px] text-slate-300 font-bold uppercase">THE ONE COMMUNITY</p>
+                    <h1 class="text-sm font-black text-slate-900">SPAIN <span class="text-red-600">LA LIGA</span></h1>
+                    <p class="text-[8px] text-slate-500 font-bold uppercase">COMMUNITY LEAGUE</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="promptAdminPassword()" class="px-2.5 py-1.5 rounded-lg bg-[#00ff87]/20 text-[#00ff87] border border-[#00ff87]/40 text-[10px] font-bold hover:bg-[#00ff87] hover:text-[#37003c] transition">
+                <button onclick="promptAdminPassword()" class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 text-[10px] font-bold hover:bg-red-600 hover:text-white transition shadow-sm">
                     <i class="fa-solid fa-pen-to-square mr-1"></i> Admin Edit
                 </button>
-                <div class="flex bg-[#1a001d] p-0.5 rounded-lg border border-purple-900/40">
-                    <button id="tab-fixtures-btn" onclick="switchTab('fixtures')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg">Fixtures</button>
-                    <button id="tab-standings-btn" onclick="switchTab('standings')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400">Standings</button>
+                <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                    <button id="tab-fixtures-btn" onclick="switchTab('fixtures')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-red-600 bg-white shadow-sm">Fixtures</button>
+                    <button id="tab-standings-btn" onclick="switchTab('standings')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-500">Standings</button>
                 </div>
             </div>
         </div>
@@ -41,37 +42,41 @@
 
     <main class="max-w-7xl mx-auto px-3 py-5 flex-1 w-full">
         <div class="grid grid-cols-2 gap-2 mb-5">
-            <div class="bg-[#1f0022]/80 border border-purple-950/60 p-3 rounded-xl flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-[#00ff87] text-sm"></i>
-                <div><span class="text-[8px] text-slate-400 block uppercase">Teams</span><span class="text-sm font-bold">12</span></div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                </div>
+                <div><span class="text-[8px] text-slate-400 block uppercase font-semibold">Teams</span><span class="text-sm font-bold text-slate-800">12</span></div>
             </div>
-            <div class="bg-[#1f0022]/80 border border-purple-950/60 p-3 rounded-xl flex items-center gap-2">
-                <i class="fa-solid fa-cloud text-[#00ff87] text-sm"></i>
-                <div><span class="text-[8px] text-slate-400 block uppercase">Database</span><span class="text-xs font-bold text-[#00ff87]" id="sync-status">Connected</span></div>
+            <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <i class="fa-solid fa-cloud text-sm"></i>
+                </div>
+                <div><span class="text-[8px] text-slate-400 block uppercase font-semibold">Database</span><span class="text-xs font-bold text-emerald-600" id="sync-status">Connected</span></div>
             </div>
         </div>
 
         <div id="tab-fixtures-content" class="space-y-4">
-            <div class="bg-[#15001a] border border-purple-950 rounded-xl p-3 shadow-xl">
-                <span class="text-[10px] font-bold text-[#00ff87] uppercase mb-2 block">Matchday Selector</span>
+            <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+                <span class="text-[10px] font-bold text-red-600 uppercase mb-2 block">Matchday Selector</span>
                 <div class="flex gap-2 overflow-x-auto scrollbar-hidden pb-1" id="matchday-selector-container"></div>
             </div>
 
-            <div class="flex justify-between items-center bg-[#1f0022] border-l-4 border-[#00ff87] p-3 rounded-r-xl">
-                <h2 class="text-sm font-black text-white" id="fixture-round-title">ROUND 1</h2>
+            <div class="flex justify-between items-center bg-white border-l-4 border-red-600 p-3 rounded-r-xl shadow-sm">
+                <h2 class="text-sm font-black text-slate-800" id="fixture-round-title">ROUND 1</h2>
                 <div class="flex gap-1">
-                    <button onclick="changeMatchday(-1)" class="w-8 h-8 bg-[#37003c] rounded-lg text-[#00ff87]"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button onclick="changeMatchday(1)" class="w-8 h-8 bg-[#37003c] rounded-lg text-[#00ff87]"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button onclick="changeMatchday(-1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-red-600 transition flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                    <button onclick="changeMatchday(1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-red-600 transition flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                 </div>
             </div>
             <div class="grid grid-cols-1 gap-3" id="fixtures-grid"></div>
         </div>
 
         <div id="tab-standings-content" class="hidden space-y-4">
-            <div class="bg-[#15001a] border border-purple-950 rounded-xl overflow-x-auto text-[10px]">
+            <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto text-[10px] shadow-sm">
                 <table class="w-full text-center min-w-[500px]">
-                    <thead class="bg-[#37003c]/60">
-                        <tr class="text-slate-400">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr class="text-slate-500 font-bold">
                             <th class="py-3 px-2">#</th>
                             <th class="py-3 text-left pl-2">Club</th>
                             <th class="py-3">M</th>
@@ -81,48 +86,48 @@
                             <th class="py-3 hidden sm:table-cell">GF</th>
                             <th class="py-3 hidden sm:table-cell">GA</th>
                             <th class="py-3">GD</th>
-                            <th class="py-3 text-[#00ff87]">pts</th>
+                            <th class="py-3 text-red-600">pts</th>
                         </tr>
                     </thead>
-                    <tbody id="standings-table-body" class="divide-y divide-purple-950/40 font-medium"></tbody>
+                    <tbody id="standings-table-body" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-        <div class="bg-[#15001a] border border-purple-900 rounded-2xl w-full max-w-lg p-5 shadow-2xl max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center pb-3 border-b border-purple-950">
-                <h3 class="text-sm font-black text-[#00ff87] uppercase"><i class="fa-solid fa-shield-halved mr-1"></i> Admin Score Manager</h3>
-                <button onclick="closeAdminModal()" class="w-7 h-7 bg-[#37003c] rounded-lg text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <div id="admin-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg p-5 shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+                <h3 class="text-sm font-black text-red-600 uppercase"><i class="fa-solid fa-shield-halved mr-1"></i> Admin Score Manager</h3>
+                <button onclick="closeAdminModal()" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-500 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="py-3 flex gap-2 items-center">
-                <label class="text-[10px] font-bold text-slate-400">Select Round:</label>
-                <select id="admin-round-select" onchange="renderAdminMatches()" class="bg-[#1f0022] text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-purple-900 focus:outline-none focus:border-[#00ff87]">
+                <label class="text-[10px] font-bold text-slate-500">Select Round:</label>
+                <select id="admin-round-select" onchange="renderAdminMatches()" class="bg-slate-50 text-xs font-bold text-slate-800 px-3 py-1.5 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600">
                 </select>
             </div>
             <div class="flex-1 overflow-y-auto space-y-2 pr-1 my-2" id="admin-matches-container"></div>
-            <div class="pt-3 border-t border-purple-950 flex justify-end gap-2">
-                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-800 text-xs font-bold rounded-lg text-slate-300">Cancel</button>
-                <button onclick="saveAllResults()" class="px-4 py-2 bg-[#00ff87] text-[#37003c] text-xs font-black rounded-lg shadow-lg hover:opacity-90">Save Changes</button>
+            <div class="pt-3 border-t border-slate-200 flex justify-end gap-2">
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-600">Cancel</button>
+                <button onclick="saveAllResults()" class="px-4 py-2 bg-red-600 text-white text-xs font-black rounded-lg shadow-md hover:bg-red-700">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <div id="password-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-        <div class="bg-[#15001a] border border-purple-900 rounded-2xl w-full max-w-xs p-5 shadow-2xl flex flex-col">
-            <div class="flex justify-between items-center pb-3 border-b border-purple-950">
-                <h3 class="text-xs font-black text-[#00ff87] uppercase"><i class="fa-solid fa-lock mr-1"></i> Admin Password</h3>
-                <button onclick="closePasswordModal()" class="w-6 h-6 bg-[#37003c] rounded-lg text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <div id="password-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+                <h3 class="text-xs font-black text-red-600 uppercase"><i class="fa-solid fa-lock mr-1"></i> Admin Password</h3>
+                <button onclick="closePasswordModal()" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-500 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="py-4">
-                <label class="text-[10px] font-bold text-slate-400 mb-1 block">Enter Admin Password:</label>
-                <input type="password" id="admin-password-input" placeholder="Password" class="w-full bg-[#1f0022] border border-purple-900 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00ff87]">
-                <p id="password-error" class="text-[9px] text-red-400 mt-1 hidden">Incorrect password. Please try again.</p>
+                <label class="text-[10px] font-bold text-slate-500 mb-1 block">Enter Admin Password:</label>
+                <input type="password" id="admin-password-input" placeholder="Password" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-red-600">
+                <p id="password-error" class="text-[9px] text-red-500 mt-1 hidden">Incorrect password. Please try again.</p>
             </div>
             <div class="flex justify-end gap-2">
-                <button onclick="closePasswordModal()" class="px-3 py-1.5 bg-slate-800 text-[10px] font-bold rounded-lg text-slate-300">Cancel</button>
-                <button onclick="verifyPassword()" class="px-3 py-1.5 bg-[#00ff87] text-[#37003c] text-[10px] font-black rounded-lg shadow-lg hover:opacity-90">Login</button>
+                <button onclick="closePasswordModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-[10px] font-bold rounded-lg text-slate-600">Cancel</button>
+                <button onclick="verifyPassword()" class="px-3 py-1.5 bg-red-600 text-white text-[10px] font-black rounded-lg shadow-md hover:bg-red-700">Login</button>
             </div>
         </div>
     </div>
@@ -147,19 +152,18 @@
         const db = getFirestore(app);
 
         const TEAMS_LIST = [
-            
-    { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Wolfy21002" },
-    { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/Sammykaung" },
-    { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/bobominhein" },
-    { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/MGYeye1473" },
-    { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/Sanminoo" },
-    { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/iz_szlai" },
-    { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Aung19959" },
-    { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/zeusace0" },
-    { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/aamk79" },
-    { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/" },
-    { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/MoungNaing" },
-    { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Naindjjd" }
+           { id: "BAR", name: "Barcelona", logo: "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg", telegram: "https://t.me/theinphyupyarmin" },
+{ id: "RMA", name: "Real Madrid", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg", telegram: "https://t.me/Heropool" },
+{ id: "ATM", name: "Atletico Madrid", logo: "https://upload.wikimedia.org/wikipedia/en/f/f4/Atletico_Madrid_2024_logo.svg", telegram: "https://t.me/MESSi_10FC" },
+{ id: "VIL", name: "Villarreal", logo: "https://upload.wikimedia.org/wikipedia/en/7/70/Villarreal_CF_logo.svg", telegram: "https://t.me/HainnH20" },
+{ id: "BET", name: "Real Betis", logo: "https://upload.wikimedia.org/wikipedia/en/1/13/Real_Betis_Balompi%C3%A9.svg", telegram: "https://t.me/Junnpe" },
+{ id: "RSO", name: "Real Sociedad", logo: "https://upload.wikimedia.org/wikipedia/en/f/f1/Real_Sociedad_logo.svg", telegram: "https://t.me/KeeRan_kawor" },
+{ id: "GET", name: "Getafe", logo: "https://upload.wikimedia.org/wikipedia/en/d/dc/Getafe_CF.svg", telegram: "https://t.me/zores11" },
+{ id: "SEV", name: "Sevilla", logo: "https://upload.wikimedia.org/wikipedia/en/3/3b/Sevilla_FC_logo.svg", telegram: "https://t.me/" },
+{ id: "ALA", name: "Alaves", logo: "https://upload.wikimedia.org/wikipedia/en/2/2e/Deportivo_Alav%C3%A9s_logo_%282020%29.svg", telegram: "https://t.me/waiyan1212020" },
+{ id: "ATH", name: "Athletic Bilbao", logo: "https://upload.wikimedia.org/wikipedia/en/9/98/Athletic_Club_Bilbao_logo.svg", telegram: "https://t.me/BWhite099" },
+{ id: "GIR", name: "Girona", logo: "https://upload.wikimedia.org/wikipedia/en/9/90/Girona_FC_Logo.svg", telegram: "https://t.me/APH_Design_Studio_97" },
+{ id: "VAL", name: "Valencia", logo: "https://upload.wikimedia.org/wikipedia/en/c/ce/Valencia_CF_logo_%282009%29.svg", telegram: "https://t.me/agust_HML" }
 
         ];
 
@@ -183,7 +187,6 @@
                     await signInAnonymously(auth);
                 }
                 
-                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
                 const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
                 
                 onSnapshot(docRef, (docSnap) => {
@@ -232,8 +235,8 @@
         window.switchTab = function(tab) {
             document.getElementById('tab-fixtures-content').classList.toggle('hidden', tab !== 'fixtures');
             document.getElementById('tab-standings-content').classList.toggle('hidden', tab !== 'standings');
-            document.getElementById('tab-fixtures-btn').className = tab === 'fixtures' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
-            document.getElementById('tab-standings-btn').className = tab === 'standings' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
+            document.getElementById('tab-fixtures-btn').className = tab === 'fixtures' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-red-600 bg-white shadow-sm" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-500";
+            document.getElementById('tab-standings-btn').className = tab === 'standings' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-red-600 bg-white shadow-sm" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-500";
             if(tab === 'standings') updateStandingsTable();
         };
 
@@ -254,12 +257,12 @@
             container.innerHTML = '';
             for (let r = 0; r < TOTAL_ROUNDS; r++) {
                 const btn = document.createElement('button');
-                btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === 0 ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === 0 ? 'bg-red-600 text-white border-red-600' : 'bg-slate-50 text-slate-600 border-slate-200'}`;
                 btn.innerText = `R${r + 1}`;
                 btn.onclick = () => { 
                     currentViewingMatchday = r; 
                     document.querySelectorAll('#matchday-selector-container button').forEach((b, idx) => {
-                        b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === r ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                        b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === r ? 'bg-red-600 text-white border-red-600' : 'bg-slate-50 text-slate-600 border-slate-200'}`;
                     });
                     renderFixtures(); 
                 };
@@ -279,17 +282,17 @@
                 const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
                 const res = roundResults.find(r => r.home === h.id && r.away === a.id);
                 
-                let scoreDisplay = '<span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>';
+                let scoreDisplay = '<span class="text-red-600 font-black text-[10px] w-[20%] text-center">VS</span>';
                 if (res && res.hs !== undefined && res.hs !== null && res.hs !== "") {
-                    scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${res.hs} - ${res.as}</span>`;
+                    scoreDisplay = `<span class="text-slate-800 font-bold text-xs w-[20%] text-center">${res.hs} - ${res.as}</span>`;
                 }
 
                 const card = document.createElement('div');
-                card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
+                card.className = "bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-sm hover:border-red-300 transition";
                 card.innerHTML = `
-                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
+                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate text-slate-800 hover:text-red-600">${h.name}</a></div>
                     ${scoreDisplay}
-                    <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] text-right">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"></div>`;
+                    <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate text-slate-800 hover:text-red-600 text-right">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"></div>`;
                 container.appendChild(card);
             });
         }
@@ -299,12 +302,12 @@
             if(!tbody) return;
             const sorted = [...standingsData].sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
             tbody.innerHTML = sorted.map((t, i) => `
-                <tr class="hover:bg-[#37003c]/20">
-                    <td class="py-3 px-2">${i+1}</td>
-                    <td class="text-left py-3 pl-2"><a href="${t.telegram}" target="_blank" class="flex items-center gap-2"><img src="${t.logo}" class="w-5 h-5 object-contain" crossorigin="anonymous"><span class="font-semibold text-white">${t.name}</span></a></td>
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 px-2 text-slate-500 font-semibold">${i+1}</td>
+                    <td class="text-left py-3 pl-2"><a href="${t.telegram}" target="_blank" class="flex items-center gap-2"><img src="${t.logo}" class="w-5 h-5 object-contain" crossorigin="anonymous"><span class="font-semibold text-slate-800 hover:text-red-600">${t.name}</span></a></td>
                     <td class="py-3">${t.mp}</td><td class="py-3">${t.w}</td><td class="py-3">${t.d}</td><td class="py-3">${t.l}</td>
                     <td class="py-3 hidden sm:table-cell">${t.gf}</td><td class="py-3 hidden sm:table-cell">${t.ga}</td>
-                    <td class="py-3">${t.gd}</td><td class="py-3 font-black text-[#00ff87]">${t.pts}</td>
+                    <td class="py-3">${t.gd}</td><td class="py-3 font-black text-red-600">${t.pts}</td>
                 </tr>`).join('');
         }
         
@@ -313,7 +316,7 @@
             if (n >= 0 && n < TOTAL_ROUNDS) { 
                 currentViewingMatchday = n; 
                 document.querySelectorAll('#matchday-selector-container button').forEach((b, idx) => {
-                    b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === n ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                    b.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${idx === n ? 'bg-red-600 text-white border-red-600' : 'bg-slate-50 text-slate-600 border-slate-200'}`;
                 });
                 renderFixtures(); 
             }
@@ -369,22 +372,22 @@
                 const res = roundResults.find(r => r.home === h.id && r.away === a.id) || { home: h.id, away: a.id, hs: '', as: '' };
 
                 const row = document.createElement('div');
-                row.className = "bg-[#1f0022] p-2.5 rounded-xl border border-purple-950 flex items-center justify-between gap-2";
+                row.className = "bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2";
                 row.innerHTML = `
-                    <div class="text-xs font-bold w-[38%] truncate text-right">${h.name}</div>
+                    <div class="text-xs font-bold w-[38%] truncate text-right text-slate-800">${h.name}</div>
                     <div class="flex items-center gap-1 w-[24%] justify-center">
-                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="hs-input w-10 bg-[#15001a] border border-purple-900 rounded text-center text-xs font-bold py-1 text-white focus:outline-none focus:border-[#00ff87]" value="${res.hs !== undefined ? res.hs : ''}">
-                        <span class="text-slate-500">-</span>
-                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="as-input w-10 bg-[#15001a] border border-purple-900 rounded text-center text-xs font-bold py-1 text-white focus:outline-none focus:border-[#00ff87]" value="${res.as !== undefined ? res.as : ''}">
+                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="hs-input w-10 bg-white border border-slate-300 rounded text-center text-xs font-bold py-1 text-slate-800 focus:outline-none focus:border-red-600" value="${res.hs !== undefined ? res.hs : ''}">
+                        <span class="text-slate-400">-</span>
+                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="as-input w-10 bg-white border border-slate-300 rounded text-center text-xs font-bold py-1 text-slate-800 focus:outline-none focus:border-red-600" value="${res.as !== undefined ? res.as : ''}">
                     </div>
-                    <div class="text-xs font-bold w-[38%] truncate">${a.name}</div>
+                    <div class="text-xs font-bold w-[38%] truncate text-slate-800">${a.name}</div>
                 `;
                 container.appendChild(row);
             });
         };
 
         window.saveAllResults = async function() {
-            const roundIdx = parseInt(document.getElementById('admin-round-select-select') || document.getElementById('admin-round-select').value);
+            const roundIdx = parseInt(document.getElementById('admin-round-select').value);
             const container = document.getElementById('admin-matches-container');
             const hInputs = container.querySelectorAll('.hs-input');
             const aInputs = container.querySelectorAll('.as-input');
@@ -395,7 +398,6 @@
                 const away = hInputs[i].getAttribute('data-away');
                 const hsVal = hInputs[i].value;
                 const asVal = aInputs[i].value;
-                newRoundResults.post = true; // dummy prop or direct assignment
                 newRoundResults.push({
                     home: home,
                     away: away,
@@ -410,7 +412,6 @@
             updateStandingsTable();
 
             try {
-                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
                 const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
                 await setDoc(docRef, { results: RESULTS });
                 closeAdminModal();
