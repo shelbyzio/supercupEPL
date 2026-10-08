@@ -20,16 +20,21 @@
         <div class="max-w-7xl mx-auto px-3 py-3 flex flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-2">
                 <div class="bg-white p-1 rounded-lg h-9 w-9 overflow-hidden flex items-center justify-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="PL" class="h-full w-full object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="PL" class="h-full w-full object-contain" crossorigin="anonymous">
                 </div>
                 <div>
                     <h1 class="text-sm font-black text-white">PREMIER <span class="text-[#00ff87]">LEAGUE</span></h1>
                     <p class="text-[8px] text-slate-300 font-bold uppercase">THE ONE COMMUNITY</p>
                 </div>
             </div>
-            <div class="flex bg-[#1a001d] p-0.5 rounded-lg border border-purple-900/40">
-                <button id="tab-fixtures-btn" onclick="switchTab('fixtures')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg">Fixtures</button>
-                <button id="tab-standings-btn" onclick="switchTab('standings')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400">Standings</button>
+            <div class="flex items-center gap-2">
+                <button onclick="promptAdminPassword()" class="px-2.5 py-1.5 rounded-lg bg-[#00ff87]/20 text-[#00ff87] border border-[#00ff87]/40 text-[10px] font-bold hover:bg-[#00ff87] hover:text-[#37003c] transition">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Admin Edit
+                </button>
+                <div class="flex bg-[#1a001d] p-0.5 rounded-lg border border-purple-900/40">
+                    <button id="tab-fixtures-btn" onclick="switchTab('fixtures')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg">Fixtures</button>
+                    <button id="tab-standings-btn" onclick="switchTab('standings')" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400">Standings</button>
+                </div>
             </div>
         </div>
     </header>
@@ -41,8 +46,8 @@
                 <div><span class="text-[8px] text-slate-400 block uppercase">Teams</span><span class="text-sm font-bold">12</span></div>
             </div>
             <div class="bg-[#1f0022]/80 border border-purple-950/60 p-3 rounded-xl flex items-center gap-2">
-                <i class="fa-solid fa-calendar-check text-[#00ff87] text-sm"></i>
-                <div><span class="text-[8px] text-slate-400 block uppercase">Matches</span><span class="text-sm font-bold">66</span></div>
+                <i class="fa-solid fa-cloud text-[#00ff87] text-sm"></i>
+                <div><span class="text-[8px] text-slate-400 block uppercase">Database</span><span class="text-xs font-bold text-[#00ff87]" id="sync-status">Connected</span></div>
             </div>
         </div>
 
@@ -85,67 +90,152 @@
         </div>
     </main>
 
-    <script>
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-[#15001a] border border-purple-900 rounded-2xl w-full max-w-lg p-5 shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-purple-950">
+                <h3 class="text-sm font-black text-[#00ff87] uppercase"><i class="fa-solid fa-shield-halved mr-1"></i> Admin Score Manager</h3>
+                <button onclick="closeAdminModal()" class="w-7 h-7 bg-[#37003c] rounded-lg text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="py-3 flex gap-2 items-center">
+                <label class="text-[10px] font-bold text-slate-400">Select Round:</label>
+                <select id="admin-round-select" onchange="renderAdminMatches()" class="bg-[#1f0022] text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-purple-900 focus:outline-none focus:border-[#00ff87]">
+                </select>
+            </div>
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1 my-2" id="admin-matches-container"></div>
+            <div class="pt-3 border-t border-purple-950 flex justify-end gap-2">
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-800 text-xs font-bold rounded-lg text-slate-300">Cancel</button>
+                <button onclick="saveAllResults()" class="px-4 py-2 bg-[#00ff87] text-[#37003c] text-xs font-black rounded-lg shadow-lg hover:opacity-90">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-[#15001a] border border-purple-900 rounded-2xl w-full max-w-xs p-5 shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-purple-950">
+                <h3 class="text-xs font-black text-[#00ff87] uppercase"><i class="fa-solid fa-lock mr-1"></i> Admin Password</h3>
+                <button onclick="closePasswordModal()" class="w-6 h-6 bg-[#37003c] rounded-lg text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="py-4">
+                <label class="text-[10px] font-bold text-slate-400 mb-1 block">Enter Admin Password:</label>
+                <input type="password" id="admin-password-input" placeholder="Password" class="w-full bg-[#1f0022] border border-purple-900 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00ff87]">
+                <p id="password-error" class="text-[9px] text-red-400 mt-1 hidden">Incorrect password. Please try again.</p>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button onclick="closePasswordModal()" class="px-3 py-1.5 bg-slate-800 text-[10px] font-bold rounded-lg text-slate-300">Cancel</button>
+                <button onclick="verifyPassword()" class="px-3 py-1.5 bg-[#00ff87] text-[#37003c] text-[10px] font-black rounded-lg shadow-lg hover:opacity-90">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCG8xdfNHBFKo1VlfBYCYZTP-8vid3R97I",
+            authDomain: "superepl.firebaseapp.com",
+            projectId: "superepl",
+            storageBucket: "superepl.firebasestorage.app",
+            messagingSenderId: "885676848744",
+            appId: "1:885676848744:web:ac9f912c3f06ecd3c2eddd",
+            measurementId: "G-FNDM2JKVH9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
         const TEAMS_LIST = [
-            { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Nyan428925" },
-            { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/" },
-            { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/kenzjust" },
-            { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/Nikakmt" },
-            { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/aungnayzan" },
-            { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/Pyaephyokyaw255" },
-            { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/" },
-            { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/" },
-            { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/MayJu2004" },
-            { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/ptkyaw87" },
-            { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/KlKhaing12" },
-            { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Heropool" }
+            
+    { id: "MU", name: "Man United", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg", telegram: "https://t.me/Wolfy21002" },
+    { id: "MC", name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg", telegram: "https://t.me/Sammykaung" },
+    { id: "ARS", name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", telegram: "https://t.me/bobominhein" },
+    { id: "LIV", name: "Liverpool", logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg", telegram: "https://t.me/MGYeye1473" },
+    { id: "CHE", name: "Chelsea", logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg", telegram: "https://t.me/Sanminoo" },
+    { id: "TOT", name: "Tottenham", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg", telegram: "https://t.me/iz_szlai" },
+    { id: "NFO", name: "Nottingham", logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg", telegram: "https://t.me/Aung19959" },
+    { id: "NEW", name: "Newcastle", logo: "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg", telegram: "https://t.me/zeusace0" },
+    { id: "AVL", name: "Aston Villa", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/86/Aston_Villa_F.C._logo.svg/250px-Aston_Villa_F.C._logo.svg.png", telegram: "https://t.me/aamk79" },
+    { id: "LEE", name: "Leeds", logo: "https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg", telegram: "https://t.me/" },
+    { id: "WOL", name: "Wolves", logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg", telegram: "https://t.me/MoungNaing" },
+    { id: "BRI", name: "Brighton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/250px-Brighton_and_Hove_Albion_FC_crest.svg.png", telegram: "https://t.me/Naindjjd" }
+
         ];
 
         let fixtures = [], currentViewingMatchday = 0, TOTAL_ROUNDS = 11;
         let standingsData = [];
+        let RESULTS = {};
 
-        const RESULTS = {
-            0: [{ home: "MU", away: "BRI", hs: 3, as: 0 }, { home: "MC", away: "WOL", hs: 5, as: 0 }, { home: "ARS", away: "LEE", hs: 5, as: 4 }, { home: "LIV", away: "AVL", hs: 3, as: 0 }, { home: "CHE", away: "NEW", hs: 2, as: 0 }, { home: "TOT", away: "NFO", hs: 3, as: 0 }],
-            1: [{ home: "MC", away: "BRI", hs: 2, as: 0 }, { home: "ARS", away: "MU", hs: 0, as: 2 }, { home: "LIV", away: "WOL", hs: 11, as: 1 }, { home: "CHE", away: "LEE", hs: 3, as: 4 }, { home: "TOT", away: "AVL", hs: 4, as: 1 }, { home: "NFO", away: "NEW", hs: 2, as: 3 }],
-            2: [{ home: "ARS", away: "BRI", hs: 3, as: 2 }, { home: "LIV", away: "MC", hs: 5, as: 4 }, { home: "CHE", away: "MU", hs: 0, as: 3 }, { home: "TOT", away: "WOL", hs: 5, as: 1 }, { home: "NFO", away: "LEE", hs: 0, as: 6 }, { home: "NEW", away: "AVL", hs: 3, as: 3 }],
-            3: [{ home: "LIV", away: "BRI", hs: 5, as: 5 }, { home: "CHE", away: "ARS", hs: 0, as: 2 }, { home: "TOT", away: "MC", hs: 1, as: 1 }, { home: "NFO", away: "MU", hs: 1, as: 5 }, { home: "NEW", away: "WOL", hs: 1, as: 0 }, { home: "AVL", away: "LEE", hs: 0, as: 8 }],
-            4: [{ home: "CHE", away: "BRI", hs: 8, as: 1 }, { home: "TOT", away: "LIV", hs: 2, as: 3 }, { home: "NFO", away: "ARS", hs: 2, as: 3 }, { home: "NEW", away: "MC", hs: 3, as: 0 }, { home: "AVL", away: "MU", hs: 3, as: 4 }, { home: "LEE", away: "WOL", hs: 12, as: 2 }],
-            5: [{ home: "TOT", away: "BRI", hs: 4, as: 2 }, { home: "NFO", away: "CHE", hs: 0, as: 3 }, { home: "NEW", away: "LIV", hs: 0, as: 1 }, { home: "AVL", away: "ARS", hs: 4, as: 1 }, { home: "LEE", away: "MC", hs: 3, as: 1 }, { home: "WOL", away: "MU", hs: 3, as: 7 }],
-            6: [{ home: "NFO", away: "BRI", hs: 0, as: 3 }, { home: "NEW", away: "TOT", hs: 0, as: 1 }, { home: "AVL", away: "CHE", hs: 2, as: 6 }, { home: "LEE", away: "LIV", hs: 1, as: 2 }, { home: "WOL", away: "ARS", hs: 2, as: 6 }, { home: "MU", away: "MC", hs: 5, as: 2 }],
-            7: [{ home: "NEW", away: "BRI", hs: 3, as: 0 }, { home: "AVL", away: "NFO", hs: 3, as: 0 }, { home: "LEE", away: "TOT", hs: 2, as: 2 }, { home: "WOL", away: "CHE", hs: 0, as: 2 }, { home: "MU", away: "LIV", hs: 4, as: 3 }, { home: "MC", away: "ARS", hs: 3, as: 7 }],
-            8: [{ home: "AVL", away: "BRI", hs: 6, as: 2 }, { home: "LEE", away: "NEW", hs: 1, as: 0 }, { home: "WOL", away: "NFO", hs: 3, as: 0 }, { home: "MU", away: "TOT", hs: 2, as: 3 }, { home: "MC", away: "CHE", hs: 2, as: 6 }, { home: "ARS", away: "LIV", hs: 0, as: 2 }],
-            9: [{ home: "LEE", away: "BRI", hs: 6, as: 1 }, { home: "WOL", away: "AVL", hs: 1, as: 4 }, { home: "MU", away: "NEW", hs: 3, as: 0 }, { home: "MC", away: "NFO", hs: 0, as: 0 }, { home: "ARS", away: "TOT", hs: 0, as: 5 }, { home: "LIV", away: "CHE", hs: 1, as: 4 }],
-            10: [{ home: "WOL", away: "BRI", hs: 0, as: 4 }, { home: "MU", away: "LEE", hs: 3, as: 4 }, { home: "MC", away: "AVL", hs: 0, as: 3 }, { home: "ARS", away: "NEW", hs: 2, as: 1 }, { home: "LIV", away: "NFO", hs: 5, as: 0 }, { home: "CHE", away: "TOT", hs: 0, as: 0 }]
-        };
+        window.onload = async function() {
+            generateFixedRoundRobinFixtures();
+            renderMatchdaySelector();
+            
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } catch (customErr) {
+                        console.warn("Custom token sign-in failed, falling back to anonymous auth:", customErr);
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
+                const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
+                
+                onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data().results) {
+                        RESULTS = docSnap.data().results;
+                    } else {
+                        RESULTS = {};
+                        setDoc(docRef, { results: RESULTS }).catch(console.error);
+                    }
+                    processAllResults();
+                    renderFixtures();
+                    updateStandingsTable();
+                }, (error) => {
+                    console.error("Firestore listener error:", error);
+                    RESULTS = {};
+                    processAllResults();
+                    renderFixtures();
+                    updateStandingsTable();
+                });
 
-        window.onload = function() { 
-            generateFixedRoundRobinFixtures(); 
-            processAllResults();
-            renderMatchdaySelector(); 
-            renderFixtures(); 
+            } catch (e) {
+                console.error("Auth/Init error:", e);
+                RESULTS = {};
+                processAllResults();
+                renderFixtures();
+                updateStandingsTable();
+            }
         };
 
         function processAllResults() {
             standingsData = TEAMS_LIST.map(t => ({ ...t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }));
             Object.values(RESULTS).forEach(round => {
+                if (!round) return;
                 round.forEach(res => {
-                    if (res.hs === undefined) return;
+                    if (res.hs === undefined || res.hs === null || res.hs === "" || res.as === undefined || res.as === null || res.as === "") return;
                     const h = standingsData.find(t => t.id === res.home), a = standingsData.find(t => t.id === res.away);
                     if(!h || !a) return;
-                    h.mp++; a.mp++; h.gf += res.hs; h.ga += res.as; a.gf += res.as; a.ga += res.hs;
+                    const hs = parseInt(res.hs), as = parseInt(res.as);
+                    h.mp++; a.mp++; h.gf += hs; h.ga += as; a.gf += as; a.ga += hs;
                     h.gd = h.gf - h.ga; a.gd = a.gf - a.ga;
-                    if (res.hs > res.as) { h.w++; h.pts += 3; a.l++; } else if (res.hs < res.as) { a.w++; a.pts += 3; h.l++; } else { h.d++; a.d++; h.pts += 1; a.pts += 1; }
+                    if (hs > as) { h.w++; h.pts += 3; a.l++; } else if (hs < as) { a.w++; a.pts += 3; h.l++; } else { h.d++; a.d++; h.pts += 1; a.pts += 1; }
                 });
             });
         }
 
-        function switchTab(tab) {
+        window.switchTab = function(tab) {
             document.getElementById('tab-fixtures-content').classList.toggle('hidden', tab !== 'fixtures');
             document.getElementById('tab-standings-content').classList.toggle('hidden', tab !== 'standings');
             document.getElementById('tab-fixtures-btn').className = tab === 'fixtures' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
             document.getElementById('tab-standings-btn').className = tab === 'standings' ? "px-3 py-1.5 rounded-md text-[10px] font-bold text-[#00ff87] bg-[#37003c] shadow-lg" : "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400";
             if(tab === 'standings') updateStandingsTable();
-        }
+        };
 
         function generateFixedRoundRobinFixtures() {
             const numTeams = TEAMS_LIST.length;
@@ -161,6 +251,7 @@
 
         function renderMatchdaySelector() {
             const container = document.getElementById('matchday-selector-container');
+            container.innerHTML = '';
             for (let r = 0; r < TOTAL_ROUNDS; r++) {
                 const btn = document.createElement('button');
                 btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === 0 ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
@@ -178,6 +269,7 @@
 
         function renderFixtures() {
             const container = document.getElementById('fixtures-grid');
+            if(!container) return;
             container.innerHTML = '';
             document.getElementById('fixture-round-title').innerText = `ROUND ${currentViewingMatchday + 1}`;
             const roundData = fixtures[currentViewingMatchday];
@@ -185,39 +277,38 @@
             
             roundData.forEach(match => {
                 const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
-                const res = roundResults.find(r => (r.home === h.id && r.away === a.id) || (r.home === a.id && r.away === h.id));
+                const res = roundResults.find(r => r.home === h.id && r.away === a.id);
                 
                 let scoreDisplay = '<span class="text-[#00ff87] font-black text-[10px] w-[20%] text-center">VS</span>';
-                if (res && res.hs !== undefined) {
-                    const hs = res.home === h.id ? res.hs : res.as;
-                    const as = res.home === h.id ? res.as : res.hs;
-                    scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${hs} - ${as}</span>`;
+                if (res && res.hs !== undefined && res.hs !== null && res.hs !== "") {
+                    scoreDisplay = `<span class="text-white font-bold text-xs w-[20%] text-center">${res.hs} - ${res.as}</span>`;
                 }
 
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
                 card.innerHTML = `
-                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
+                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
                     ${scoreDisplay}
-                    <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain"></div>`;
+                    <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] text-right">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"></div>`;
                 container.appendChild(card);
             });
         }
 
         function updateStandingsTable() {
             const tbody = document.getElementById('standings-table-body');
-            const sorted = [...standingsData].sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+            if(!tbody) return;
+            const sorted = [...standingsData].sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
             tbody.innerHTML = sorted.map((t, i) => `
                 <tr class="hover:bg-[#37003c]/20">
                     <td class="py-3 px-2">${i+1}</td>
-                    <td class="text-left py-3 pl-2"><a href="${t.telegram}" target="_blank" class="flex items-center gap-2"><img src="${t.logo}" class="w-5 h-5 object-contain"><span class="font-semibold text-white">${t.name}</span></a></td>
+                    <td class="text-left py-3 pl-2"><a href="${t.telegram}" target="_blank" class="flex items-center gap-2"><img src="${t.logo}" class="w-5 h-5 object-contain" crossorigin="anonymous"><span class="font-semibold text-white">${t.name}</span></a></td>
                     <td class="py-3">${t.mp}</td><td class="py-3">${t.w}</td><td class="py-3">${t.d}</td><td class="py-3">${t.l}</td>
                     <td class="py-3 hidden sm:table-cell">${t.gf}</td><td class="py-3 hidden sm:table-cell">${t.ga}</td>
                     <td class="py-3">${t.gd}</td><td class="py-3 font-black text-[#00ff87]">${t.pts}</td>
                 </tr>`).join('');
         }
         
-        function changeMatchday(d) {
+        window.changeMatchday = function(d) {
             let n = currentViewingMatchday + d;
             if (n >= 0 && n < TOTAL_ROUNDS) { 
                 currentViewingMatchday = n; 
@@ -226,7 +317,107 @@
                 });
                 renderFixtures(); 
             }
-        }
+        };
+
+        window.promptAdminPassword = function() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('password-error').classList.add('hidden');
+            document.getElementById('password-modal').classList.remove('hidden');
+        };
+
+        window.closePasswordModal = function() {
+            document.getElementById('password-modal').classList.add('hidden');
+        };
+
+        window.verifyPassword = function() {
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === "2024") {
+                closePasswordModal();
+                openAdminModal();
+            } else {
+                document.getElementById('password-error').classList.remove('hidden');
+            }
+        };
+
+        window.openAdminModal = function() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            const select = document.getElementById('admin-round-select');
+            select.innerHTML = '';
+            for(let i=0; i<TOTAL_ROUNDS; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `Round ${i+1}`;
+                if(i === currentViewingMatchday) opt.selected = true;
+                select.appendChild(opt);
+            }
+            renderAdminMatches();
+        };
+
+        window.closeAdminModal = function() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        };
+
+        window.renderAdminMatches = function() {
+            const roundIdx = parseInt(document.getElementById('admin-round-select').value);
+            const container = document.getElementById('admin-matches-container');
+            container.innerHTML = '';
+            const roundData = fixtures[roundIdx];
+            const roundResults = RESULTS[roundIdx] || [];
+
+            roundData.forEach((match) => {
+                const h = TEAMS_LIST.find(t => t.id === match.home), a = TEAMS_LIST.find(t => t.id === match.away);
+                const res = roundResults.find(r => r.home === h.id && r.away === a.id) || { home: h.id, away: a.id, hs: '', as: '' };
+
+                const row = document.createElement('div');
+                row.className = "bg-[#1f0022] p-2.5 rounded-xl border border-purple-950 flex items-center justify-between gap-2";
+                row.innerHTML = `
+                    <div class="text-xs font-bold w-[38%] truncate text-right">${h.name}</div>
+                    <div class="flex items-center gap-1 w-[24%] justify-center">
+                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="hs-input w-10 bg-[#15001a] border border-purple-900 rounded text-center text-xs font-bold py-1 text-white focus:outline-none focus:border-[#00ff87]" value="${res.hs !== undefined ? res.hs : ''}">
+                        <span class="text-slate-500">-</span>
+                        <input type="number" min="0" data-home="${h.id}" data-away="${a.id}" class="as-input w-10 bg-[#15001a] border border-purple-900 rounded text-center text-xs font-bold py-1 text-white focus:outline-none focus:border-[#00ff87]" value="${res.as !== undefined ? res.as : ''}">
+                    </div>
+                    <div class="text-xs font-bold w-[38%] truncate">${a.name}</div>
+                `;
+                container.appendChild(row);
+            });
+        };
+
+        window.saveAllResults = async function() {
+            const roundIdx = parseInt(document.getElementById('admin-round-select-select') || document.getElementById('admin-round-select').value);
+            const container = document.getElementById('admin-matches-container');
+            const hInputs = container.querySelectorAll('.hs-input');
+            const aInputs = container.querySelectorAll('.as-input');
+
+            const newRoundResults = [];
+            for(let i=0; i<hInputs.length; i++) {
+                const home = hInputs[i].getAttribute('data-home');
+                const away = hInputs[i].getAttribute('data-away');
+                const hsVal = hInputs[i].value;
+                const asVal = aInputs[i].value;
+                newRoundResults.post = true; // dummy prop or direct assignment
+                newRoundResults.push({
+                    home: home,
+                    away: away,
+                    hs: hsVal !== "" ? parseInt(hsVal) : "",
+                    as: asVal !== "" ? parseInt(asVal) : ""
+                });
+            }
+
+            RESULTS[roundIdx] = newRoundResults;
+            processAllResults();
+            renderFixtures();
+            updateStandingsTable();
+
+            try {
+                // FIXED: Use exact path matching security rule: match /tournament_results/premier_league_12_team
+                const docRef = doc(db, 'tournament_results', 'premier_league_12_team');
+                await setDoc(docRef, { results: RESULTS });
+                closeAdminModal();
+            } catch(err) {
+                console.error("Error saving to Firebase:", err);
+            }
+        };
     </script>
 </body>
 </html>
