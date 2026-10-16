@@ -194,6 +194,23 @@
                 { home: "AVL", away: "ARS", hs: 1, as: 1 },
                 { home: "LEE", away: "MC", hs: 2, as: 5 },
                 { home: "WOL", away: "MU", hs: 4, as: 1 }
+            ],
+            6: [
+                { home: "NFO", away: "BRI", hs: 4, as: 6 },
+                { home: "NEW", away: "TOT", hs: 0, as: 5 },
+                { home: "AVL", away: "CHE", hs: 2, as: 1 },
+                { home: "LEE", away: "LIV", hs: 3, as: 0 },
+                { home: "WOL", away: "ARS", hs: 1, as: 4 },
+                { home: "MU", away: "MC", hs: 0, as: 3 }
+            ],
+            // Updated Round 8 Results
+            7: [
+                { home: "NEW", away: "BRI", hs: "", as: "" },
+                { home: "AVL", away: "NFO", hs: "", as: "" },
+                { home: "LEE", away: "TOT", hs: 0, as: 3 },
+                { home: "WOL", away: "CHE", hs: "", as: "" },
+                { home: "MU", away: "LIV", hs: 3, as: 0 },
+                { home: "MC", away: "ARS", hs: 5, as: 2 }
             ]
         };
 
@@ -244,7 +261,8 @@
             for (let round = 0; round < numTeams - 1; round++) {
                 const roundMatches = [];
                 for (let i = 0; i < numTeams / 2; i++) {
-                    const home = (round + i) % (numTeams - 1), away = (i === 0) ? numTeams - 1 : (numTeams - 1 - i + round) % (numTeams - 1);
+                    const home = (round + i) % (numTeams - 1);
+                    const away = (i === 0) ? numTeams - 1 : (numTeams - 1 - i + round) % (numTeams - 1);
                     roundMatches.push({ home: TEAMS_LIST[home].id, away: TEAMS_LIST[away].id });
                 }
                 fixtures.push(roundMatches);
@@ -256,7 +274,7 @@
             container.innerHTML = '';
             for (let r = 0; r < TOTAL_ROUNDS; r++) {
                 const btn = document.createElement('button');
-                btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === 0 ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
+                btn.className = `flex-shrink-0 px-3 py-1 rounded-lg font-bold text-[10px] border ${r === currentViewingMatchday ? 'bg-[#00ff87] text-[#37003c]' : 'bg-[#1a001d] text-slate-400'}`;
                 btn.innerText = `R${r + 1}`;
                 btn.onclick = () => { 
                     currentViewingMatchday = r; 
@@ -290,7 +308,7 @@
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
                 card.innerHTML = `
-                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
+                    <div class="flex items-center gap-2 w-[40%]}"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
                     ${scoreDisplay}
                     <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] text-right">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"></div>`;
                 container.appendChild(card);
