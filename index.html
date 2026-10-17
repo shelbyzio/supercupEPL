@@ -203,10 +203,10 @@
                 { home: "WOL", away: "ARS", hs: 1, as: 4 },
                 { home: "MU", away: "MC", hs: 0, as: 3 }
             ],
-            // Updated Round 8 Results
+            // Corrected Round 8 (Index 7) Results
             7: [
-                { home: "NEW", away: "BRI", hs: "", as: "" },
-                { home: "AVL", away: "NFO", hs: "", as: "" },
+                { home: "NEW", away: "BRI", hs: 3, as: 0 },
+                { home: "AVL", away: "NFO", hs: 2, as: 3 },
                 { home: "LEE", away: "TOT", hs: 0, as: 3 },
                 { home: "WOL", away: "CHE", hs: "", as: "" },
                 { home: "MU", away: "LIV", hs: 3, as: 0 },
@@ -308,7 +308,7 @@
                 const card = document.createElement('div');
                 card.className = "bg-[#15001a] border border-purple-950 rounded-xl p-3 flex items-center justify-between";
                 card.innerHTML = `
-                    <div class="flex items-center gap-2 w-[40%]}"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
+                    <div class="flex items-center gap-2 w-[40%]"><img src="${h.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"><a href="${h.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87]">${h.name}</a></div>
                     ${scoreDisplay}
                     <div class="flex items-center gap-2 w-[40%] justify-end"><a href="${a.telegram}" target="_blank" class="text-xs font-bold truncate hover:text-[#00ff87] text-right">${a.name}</a><img src="${a.logo}" class="w-8 h-8 object-contain" crossorigin="anonymous"></div>`;
                 container.appendChild(card);
